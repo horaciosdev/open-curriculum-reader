@@ -1,46 +1,46 @@
 <template>
     <div class="space-y-12 font-sans">
       <!-- Informações Básicas -->
-      <div v-if="resume.basics" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 rounded-xl shadow-lg">
+      <div v-if="curriculum.basics" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 rounded-xl shadow-lg">
         <div class="flex items-start gap-8">
           <div
-            v-if="!resume.basics.image || imageLoadError"
+            v-if="!curriculum.basics.image || imageLoadError"
             class="w-40 h-40 rounded-xl bg-blue-600 text-white flex items-center justify-center text-5xl font-bold shadow-lg"
           >
-            {{ resume.basics.name ? resume.basics.name.slice(0, 2).toUpperCase() : '' }}
+            {{ curriculum.basics.name ? curriculum.basics.name.slice(0, 2).toUpperCase() : '' }}
           </div>
           <img
             v-else
-            :src="resume.basics.image"
-            :alt="resume.basics.name"
+            :src="curriculum.basics.image"
+            :alt="curriculum.basics.name"
             @error="onImageError"
             class="w-40 h-40 rounded-xl object-cover shadow-lg"
           />
           <div class="flex-1">
-            <h1 class="text-5xl font-bold">{{ resume.basics.name }}</h1>
-            <p class="mt-2 text-2xl text-blue-100">{{ resume.basics.label }}</p>
-            <p class="mt-4 text-lg text-blue-50">{{ resume.basics.summary }}</p>
+            <h1 class="text-5xl font-bold">{{ curriculum.basics.name }}</h1>
+            <p class="mt-2 text-2xl text-blue-100">{{ curriculum.basics.label }}</p>
+            <p class="mt-4 text-lg text-blue-50">{{ curriculum.basics.summary }}</p>
 
             <div class="mt-6 flex flex-wrap gap-4">
-              <div v-if="resume.basics.location" class="flex items-center text-blue-100">
-                <span v-if="resume.basics.location.address">{{ resume.basics.location.address }}, </span>
-                <span>{{ resume.basics.location.city }}</span>
-                <span v-if="resume.basics.location.region">, {{ resume.basics.location.region }}</span>
-                <span> - {{ resume.basics.location.countryCode }}</span>
+              <div v-if="curriculum.basics.location" class="flex items-center text-blue-100">
+                <span v-if="curriculum.basics.location.address">{{ curriculum.basics.location.address }}, </span>
+                <span>{{ curriculum.basics.location.city }}</span>
+                <span v-if="curriculum.basics.location.region">, {{ curriculum.basics.location.region }}</span>
+                <span> - {{ curriculum.basics.location.countryCode }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div v-if="resume.basics.identifiers?.length" class="mt-4 flex gap-4">
-          <span v-for="id in resume.basics.identifiers" :key="id.type" class="text-blue-100">
+        <div v-if="curriculum.basics.identifiers?.length" class="mt-4 flex gap-4">
+          <span v-for="id in curriculum.basics.identifiers" :key="id.type" class="text-blue-100">
             {{ id.type }}: {{ id.value }}
           </span>
         </div>
 
-        <div v-if="resume.basics.profiles?.length" class="mt-6 flex gap-4">
+        <div v-if="curriculum.basics.profiles?.length" class="mt-6 flex gap-4">
           <a
-            v-for="profile in resume.basics.profiles"
+            v-for="profile in curriculum.basics.profiles"
             :key="profile.url"
             :href="profile.url"
             target="_blank"
@@ -57,13 +57,13 @@
         <!-- Coluna da esquerda -->
         <div class="lg:col-span-2 space-y-12">
           <!-- Experiência Profissional -->
-          <div v-if="resume.work?.length" class="space-y-8">
+          <div v-if="curriculum.work?.length" class="space-y-8">
             <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
               Experiência Profissional
             </h2>
             <div class="space-y-12">
-              <div v-for="job in resume.work" :key="job.organization" class="relative pl-8">
+              <div v-for="job in curriculum.work" :key="job.organization" class="relative pl-8">
                 <div class="absolute left-0 top-0 w-2 h-full bg-blue-600 rounded-full"></div>
                 <div class="space-y-2">
                   <div class="flex justify-between items-start">
@@ -91,13 +91,13 @@
           </div>
 
           <!-- Educação -->
-          <div v-if="resume.education?.length" class="space-y-8">
+          <div v-if="curriculum.education?.length" class="space-y-8">
             <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
               Educação
             </h2>
             <div class="space-y-8">
-              <div v-for="edu in resume.education" :key="edu.institution"
+              <div v-for="edu in curriculum.education" :key="edu.institution"
                    class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <div class="space-y-2">
                   <div class="flex justify-between items-start">
@@ -123,7 +123,7 @@
         <!-- Coluna da direita -->
         <div class="space-y-12">
           <!-- Habilidades -->
-          <div v-if="resume.skills?.length" class="space-y-6">
+          <div v-if="curriculum.skills?.length" class="space-y-6">
             <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
               Habilidades
@@ -146,13 +146,13 @@
           </div>
 
           <!-- Certificações -->
-          <div v-if="resume.certifications?.length" class="space-y-6">
+          <div v-if="curriculum.certifications?.length" class="space-y-6">
             <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
               Certificações
             </h2>
             <div class="space-y-4">
-              <div v-for="cert in resume.certifications" :key="cert.name"
+              <div v-for="cert in curriculum.certifications" :key="cert.name"
                    class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-900">{{ cert.name }}</h3>
                 <p class="text-gray-600">{{ cert.issuer }}</p>
@@ -172,13 +172,13 @@
       <!-- Seções adicionais em layout de grade -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Trabalho Voluntário -->
-        <div v-if="resume.volunteer?.length" class="space-y-6">
+        <div v-if="curriculum.volunteer?.length" class="space-y-6">
           <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
             <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
             Trabalho Voluntário
           </h2>
           <div class="space-y-6">
-            <div v-for="vol in resume.volunteer" :key="vol.organization"
+            <div v-for="vol in curriculum.volunteer" :key="vol.organization"
                  class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
               <div class="space-y-2">
                 <div class="flex justify-between items-start">
@@ -201,13 +201,13 @@
         </div>
 
         <!-- Prêmios -->
-        <div v-if="resume.awards?.length" class="space-y-6">
+        <div v-if="curriculum.awards?.length" class="space-y-6">
           <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
             <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
             Prêmios
           </h2>
           <div class="space-y-4">
-            <div v-for="award in resume.awards" :key="award.title"
+            <div v-for="award in curriculum.awards" :key="award.title"
                  class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
               <h3 class="text-xl font-semibold text-gray-900">{{ award.title }}</h3>
               <p class="text-gray-600 mt-2">{{ award.awarder }}</p>
@@ -218,13 +218,13 @@
       </div>
 
       <!-- Publicações -->
-      <div v-if="resume.publications?.length" class="space-y-6">
+      <div v-if="curriculum.publications?.length" class="space-y-6">
         <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
           <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
           Publicações
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div v-for="pub in resume.publications" :key="pub.name"
+          <div v-for="pub in curriculum.publications" :key="pub.name"
                class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
             <h3 class="text-xl font-semibold text-gray-900">{{ pub.name }}</h3>
             <p class="text-gray-600 mt-2">{{ pub.publisher }}</p>
@@ -240,13 +240,13 @@
       </div>
 
       <!-- Interesses -->
-      <div v-if="resume.interests?.length" class="space-y-6">
+      <div v-if="curriculum.interests?.length" class="space-y-6">
         <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
           <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
           Interesses
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div v-for="interest in resume.interests" :key="interest.name"
+          <div v-for="interest in curriculum.interests" :key="interest.name"
                class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
             <h3 class="text-xl font-semibold text-gray-900">{{ interest.name }}</h3>
             <div v-if="interest.keywords?.length" class="flex flex-wrap gap-2 mt-4">
@@ -260,13 +260,13 @@
       </div>
 
       <!-- Referências -->
-      <div v-if="resume.references?.length" class="space-y-6">
+      <div v-if="curriculum.references?.length" class="space-y-6">
         <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-2">
           <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
           Referências
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div v-for="ref in resume.references" :key="ref.name"
+          <div v-for="ref in curriculum.references" :key="ref.name"
                class="bg-white rounded-xl shadow-lg p-8 relative">
             <div class="absolute -top-4 left-8">
               <div class="h-16 w-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold">
@@ -288,7 +288,7 @@ import { computed, ref } from 'vue'
 import type { Curriculum } from '@/types/curriculum' // Ajuste o caminho conforme necessário
 
 const props = defineProps<{
-  resume: Curriculum
+  curriculum: Curriculum
 }>()
 
 const imageLoadError = ref(false)
@@ -300,8 +300,8 @@ const formatDate = (date: string) => {
 }
 
 const groupedSkills = computed(() => {
-  if (!props.resume.skills) return {}
-  return props.resume.skills.reduce((acc, skill) => {
+  if (!props.curriculum.skills) return {}
+  return props.curriculum.skills.reduce((acc, skill) => {
     const category = skill.category || 'other'
     if (!acc[category]) {
       acc[category] = []

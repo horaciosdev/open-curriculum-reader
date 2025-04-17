@@ -11,7 +11,7 @@
       </select>
     </div>
 
-    <component :is="currentTheme" :resume="resume" />
+    <component :is="currentTheme" :curriculum="curriculum" />
   </div>
 </template>
 
@@ -22,7 +22,7 @@ import ModernTheme from './themes/ModernTheme.vue'
 import type { Curriculum } from '../types/curriculum' // Importa o tipo Curriculum
 
 const props = defineProps({
-  resume: {
+  curriculum: {
     type: Object as () => Curriculum, // Aplica o tipo Curriculum
     required: true
   }

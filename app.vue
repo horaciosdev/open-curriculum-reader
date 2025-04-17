@@ -38,7 +38,7 @@
         <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
           <template v-if="curriculum">
             <!-- Preview do currículo será renderizado aqui -->
-            <ResumePreview :resume="curriculum" />
+            <CurriculumPreview :curriculum="curriculum" />
           </template>
           <template v-else>
             <div class="text-center py-12">
