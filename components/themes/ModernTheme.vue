@@ -3,10 +3,17 @@
       <!-- Informações Básicas -->
       <div v-if="resume.basics" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 rounded-xl shadow-lg">
         <div class="flex items-start gap-8">
+          <div 
+            v-if="!resume.basics.image || imageLoadError"
+            class="w-40 h-40 rounded-xl bg-blue-600 text-white flex items-center justify-center text-5xl font-bold shadow-lg"
+          >
+            {{ resume.basics.name ? resume.basics.name.slice(0, 2).toUpperCase() : '' }}
+          </div>
           <img
-            v-if="resume.basics.image"
+            v-else
             :src="resume.basics.image"
             :alt="resume.basics.name"
+            @error="onImageError"
             class="w-40 h-40 rounded-xl object-cover shadow-lg"
           />
           <div class="flex-1">
@@ -277,7 +284,7 @@
   </template>
 
   <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
 
   const props = defineProps({
     resume: {
@@ -285,6 +292,8 @@
       required: true
     }
   })
+
+  const imageLoadError = ref(false)
 
   const formatDate = (date: string) => {
     if (!date) return ''
@@ -303,4 +312,8 @@
       return acc
     }, {})
   })
+
+  const onImageError = () => {
+    imageLoadError.value = true
+  }
   </script>

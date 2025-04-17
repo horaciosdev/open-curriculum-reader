@@ -3,10 +3,17 @@
       <!-- Informações Básicas -->
       <div v-if="resume.basics" class="space-y-4 text-center border-b pb-8">
         <div class="flex flex-col items-center">
+          <div 
+            v-if="!resume.basics.image || imageLoadError"
+            class="w-32 h-32 rounded-full bg-blue-500 text-white flex items-center justify-center text-4xl font-bold mb-4"
+          >
+            {{ resume.basics.name ? resume.basics.name.slice(0, 2).toUpperCase() : '' }}
+          </div>
           <img
-            v-if="resume.basics.image"
+            v-else
             :src="resume.basics.image"
             :alt="resume.basics.name"
+            @error="onImageError"
             class="w-32 h-32 rounded-full object-cover mb-4"
           />
           <div>
@@ -214,7 +221,7 @@
   </template>
 
   <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
 
   const props = defineProps({
     resume: {
@@ -222,6 +229,8 @@
       required: true
     }
   })
+
+  const imageLoadError = ref(false)
 
   const formatDate = (date: string) => {
     if (!date) return ''
@@ -240,4 +249,8 @@
       return acc
     }, {})
   })
+
+  const onImageError = () => {
+    imageLoadError.value = true
+  }
   </script>
