@@ -222,7 +222,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { Curriculum } from '@/types/curriculum' // Ajuste o caminho conforme necessário
+import type { Curriculum } from '../../types/curriculum'
 
 const props = defineProps<{
   curriculum: Curriculum

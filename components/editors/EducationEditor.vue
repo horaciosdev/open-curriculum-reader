@@ -137,7 +137,7 @@
   <script setup lang="ts">
   import { XMarkIcon } from '@heroicons/vue/24/outline'
   import { ref, watch } from 'vue'
-  import type { Curriculum } from '../types/curriculum'
+  import type { Curriculum } from '../../types/curriculum'
 
   // Define props com o tipo Curriculum['education']
   const props = defineProps({

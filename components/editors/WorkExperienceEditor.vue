@@ -138,7 +138,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch, computed } from 'vue'
-import type { Curriculum } from '../types/curriculum'
+import type { Curriculum } from '../../types/curriculum'
 
 // Tipar as props com a interface Curriculum
 const props = defineProps({

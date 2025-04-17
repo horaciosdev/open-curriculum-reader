@@ -88,17 +88,19 @@ import {
   StarIcon,
   UserGroupIcon
 } from '@heroicons/vue/24/outline'
-import BasicInfoEditor from '~/components/BasicInfoEditor.vue'
-import WorkExperienceEditor from '~/components/WorkExperienceEditor.vue'
-import EducationEditor from '~/components/EducationEditor.vue'
-import CertificationsEditor from './components/CertificationsEditor.vue'
-import SkillsEditor from './components/SkillsEditor.vue'
-import VolunteerEditor from './components/VolunteerEditor.vue'
-import AwardsEditor from './components/AwardsEditor.vue'
-import PublicationsEditor from './components/PublicationsEditor.vue'
-import InterestsEditor from './components/InterestsEditor.vue'
-import type { Curriculum } from './types/curriculum' // Importa o tipo Curriculum
-import ReferencesEditor from './components/ReferencesEditor.vue'
+import type { Curriculum } from '~/types/curriculum'
+
+import BasicInfoEditor from '~/components/editors/BasicInfoEditor.vue'
+import WorkExperienceEditor from '~/components/editors/WorkExperienceEditor.vue'
+import EducationEditor from '~/components/editors/EducationEditor.vue'
+import CertificationsEditor from '~/components/editors/CertificationsEditor.vue'
+import SkillsEditor from '~/components/editors/SkillsEditor.vue'
+import VolunteerEditor from '~/components/editors/VolunteerEditor.vue'
+import AwardsEditor from '~/components/editors/AwardsEditor.vue'
+import PublicationsEditor from '~/components/editors/PublicationsEditor.vue'
+import InterestsEditor from '~/components/editors/InterestsEditor.vue'
+import ReferencesEditor from '~/components/editors/ReferencesEditor.vue'
+
 type ActiveSection = keyof Curriculum;
 
 const sections = [
