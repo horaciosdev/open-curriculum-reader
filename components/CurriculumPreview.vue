@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="currentTheme" :curriculum="curriculum" />
+    <component :is="currentTheme" :curriculum="curriculum" :key="curriculumHash" />
   </div>
 </template>
 
@@ -29,4 +29,8 @@ const themes = {
 
 // Computa o tema atual com base na prop `selectedTheme`
 const currentTheme = computed(() => themes[props.selectedTheme as keyof typeof themes] || ModernTheme)
+
+const curriculumHash = computed(() => {
+  return JSON.stringify(props.curriculum) + Date.now()
+})
 </script>
