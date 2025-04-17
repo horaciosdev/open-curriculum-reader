@@ -240,7 +240,7 @@
 
   const groupedSkills = computed(() => {
     if (!props.resume.skills) return {}
-    return props.resume.skills.reduce((acc, skill) => {
+    return props.resume.skills.reduce((acc: any, skill: any) => {
       const category = skill.category || 'other'
       if (!acc[category]) {
         acc[category] = []
