@@ -167,23 +167,31 @@
         <div
           v-for="(profile, index) in localBasicInfo.profiles"
           :key="index"
-          class="flex items-center gap-2 mb-3 p-2 bg-white border border-gray-200 rounded relative"
+          class="flex flex-col gap-2 mb-3 p-2 bg-white border border-gray-200 rounded relative"
         >
-          <select
-            v-model="profile.network"
-            class="flex-shrink-0 w-auto px-2 py-2 border rounded border-gray-300"
-          >
-            <option value="LinkedIn">LinkedIn</option>
-            <option value="GitHub">GitHub</option>
-            <option value="Lattes">Lattes</option>
-            <option value="Other">Outro</option>
-          </select>
+          <div class="flex items-center gap-2">
+            <select
+              v-model="profile.network"
+              class="flex-shrink-0 w-auto px-2 py-2 border rounded border-gray-300"
+            >
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="GitHub">GitHub</option>
+              <option value="Lattes">Lattes</option>
+              <option value="Other">Outro</option>
+            </select>
+            <input
+              v-model="profile.url"
+              type="url"
+              placeholder="URL do Perfil*"
+              required
+              class="flex-grow px-3 py-2 border rounded border-gray-300 min-w-0"
+            />
+          </div>
           <input
-            v-model="profile.url"
-            type="url"
-            placeholder="URL do Perfil*"
-            required
-            class="flex-grow px-3 py-2 border rounded border-gray-300 min-w-0"
+            v-model="profile.username"
+            type="text"
+            placeholder="Nome de Usuário (opcional)"
+            class="w-full px-3 py-2 border rounded border-gray-300"
           />
           <button
             type="button"
@@ -208,18 +216,17 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
+import type { Curriculum } from '../types/curriculum'
 
-const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true
-  }
-})
+// Define props com o tipo Curriculum['basics']
+const props = defineProps<{
+  modelValue: Curriculum['basics']
+}>()
 
 const emit = defineEmits(['update:modelValue'])
 
-// Create a deep copy of the modelValue to avoid direct mutation
-const localBasicInfo = ref({
+// Cria uma cópia local do modelValue para evitar mutação direta
+const localBasicInfo = ref<Curriculum['basics']>({
   name: props.modelValue.name || '',
   label: props.modelValue.label || '',
   summary: props.modelValue.summary || '',
@@ -227,41 +234,49 @@ const localBasicInfo = ref({
   identifiers: props.modelValue.identifiers || [],
   location: {
     address: props.modelValue.location?.address || '',
-    city: props.modelValue.location?.city || '',
+    city: props.modelValue.location.city || '',
     region: props.modelValue.location?.region || '',
-    countryCode: props.modelValue.location?.countryCode || 'BR'
+    countryCode: props.modelValue.location.countryCode || 'BR'
   },
   profiles: props.modelValue.profiles || []
 })
 
-// Watch for changes and emit updates in real-time
-watch(localBasicInfo, (newValue) => {
-  // Validate required fields before emitting
-  if (newValue.name &&
+// Observa mudanças e emite atualizações em tempo real
+watch(
+  localBasicInfo,
+  (newValue) => {
+    // Valida campos obrigatórios antes de emitir
+    if (
+      newValue.name &&
       newValue.summary &&
       newValue.location.city &&
       newValue.location.countryCode &&
-      newValue.profiles.length > 0) {
-    emit('update:modelValue', newValue)
-  }
-}, { deep: true })
+      newValue.profiles.length > 0
+    ) {
+      emit('update:modelValue', newValue)
+    }
+  },
+  { deep: true }
+)
 
+// Funções para adicionar/remover identificadores
 const addIdentifier = () => {
-  localBasicInfo.value.identifiers.push({
-    type: 'CPF',
+  localBasicInfo.value.identifiers?.push({
+    type: 'CPF', // Valor padrão
     value: ''
   })
 }
 
 const removeIdentifier = (index: number) => {
-  localBasicInfo.value.identifiers.splice(index, 1)
+  localBasicInfo.value.identifiers?.splice(index, 1)
 }
 
+// Funções para adicionar/remover perfis
 const addProfile = () => {
   localBasicInfo.value.profiles.push({
-    network: 'LinkedIn',
+    network: 'LinkedIn', // Valor padrão
     url: '',
-    username: ''
+    username: '' // Campo opcional
   })
 }
 
@@ -269,13 +284,14 @@ const removeProfile = (index: number) => {
   localBasicInfo.value.profiles.splice(index, 1)
 }
 
+// Funções para upload de imagem
 const imageUpload = ref<HTMLInputElement | null>(null)
 
 const handleImageUpload = (event: any) => {
   const file = event.target.files[0]
   const reader = new FileReader()
   reader.onload = () => {
-    localBasicInfo.value.image = reader.result
+    localBasicInfo.value.image = reader.result as string
   }
   reader.readAsDataURL(file)
 }
@@ -288,6 +304,7 @@ const removeImage = () => {
   localBasicInfo.value.image = ''
 }
 
+// Funções para arrastar e soltar imagem
 const isDragging = ref(false)
 
 const dragOver = () => {
@@ -303,17 +320,8 @@ const handleDrop = (event: any) => {
   const file = event.dataTransfer.files[0]
   const reader = new FileReader()
   reader.onload = () => {
-    localBasicInfo.value.image = reader.result
+    localBasicInfo.value.image = reader.result as string
   }
   reader.readAsDataURL(file)
 }
 </script>
-
-<style scoped>
-.basic-info-editor input,
-.basic-info-editor textarea,
-.basic-info-editor select {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-</style>

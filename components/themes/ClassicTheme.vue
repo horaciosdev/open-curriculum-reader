@@ -3,7 +3,7 @@
       <!-- Informações Básicas -->
       <div v-if="resume.basics" class="space-y-4 text-center border-b pb-8">
         <div class="flex flex-col items-center">
-          <div 
+          <div
             v-if="!resume.basics.image || imageLoadError"
             class="w-32 h-32 rounded-full bg-blue-500 text-white flex items-center justify-center text-4xl font-bold mb-4"
           >
@@ -90,7 +90,7 @@
                 <div v-if="edu.score" class="text-gray-500">Nota: {{ edu.score }}</div>
               </div>
               <div class="text-sm text-gray-500 italic">
-                {{ formatDate(edu.startDate) }} - {{ formatDate(edu.endDate) }}
+                {{ formatDate(edu.startDate) }} - {{ formatDate(edu.endDate ?? 'Presente') }}
               </div>
             </div>
             <ul v-if="edu.courses?.length" class="mt-2 list-disc list-inside text-gray-700">
@@ -220,37 +220,35 @@
     </div>
   </template>
 
-  <script setup lang="ts">
-  import { computed, ref } from 'vue'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import type { Curriculum } from '@/types/curriculum' // Ajuste o caminho conforme necessário
 
-  const props = defineProps({
-    resume: {
-      type: Object,
-      required: true
+const props = defineProps<{
+  resume: Curriculum
+}>()
+
+const imageLoadError = ref(false)
+
+const formatDate = (date: string) => {
+  if (!date) return ''
+  const [year, month] = date.split('-')
+  return `${month}/${year}`
+}
+
+const groupedSkills = computed(() => {
+  if (!props.resume.skills) return {}
+  return props.resume.skills.reduce((acc, skill) => {
+    const category = skill.category || 'other'
+    if (!acc[category]) {
+      acc[category] = []
     }
-  })
+    acc[category].push(skill)
+    return acc
+  }, {} as Record<string, Curriculum['skills']>)
+})
 
-  const imageLoadError = ref(false)
-
-  const formatDate = (date: string) => {
-    if (!date) return ''
-    const [year, month] = date.split('-')
-    return `${month}/${year}`
-  }
-
-  const groupedSkills = computed(() => {
-    if (!props.resume.skills) return {}
-    return props.resume.skills.reduce((acc: any, skill: any) => {
-      const category = skill.category || 'other'
-      if (!acc[category]) {
-        acc[category] = []
-      }
-      acc[category].push(skill)
-      return acc
-    }, {})
-  })
-
-  const onImageError = () => {
-    imageLoadError.value = true
-  }
-  </script>
+const onImageError = () => {
+  imageLoadError.value = true
+}
+</script>

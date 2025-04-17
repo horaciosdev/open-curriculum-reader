@@ -27,8 +27,8 @@
           <!-- Componente de edição será renderizado aqui -->
           <component
             :is="getEditorComponent()"
-            v-if="resume"
-            v-model="resume[activeSection]"
+            v-if="curriculum"
+            v-model="curriculum[activeSection]"
           />
         </div>
       </div>
@@ -36,9 +36,9 @@
       <!-- Visualização do currículo -->
       <div class="flex-1 overflow-y-auto p-8">
         <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
-          <template v-if="resume">
+          <template v-if="curriculum">
             <!-- Preview do currículo será renderizado aqui -->
-            <ResumePreview :resume="resume" />
+            <ResumePreview :resume="curriculum" />
           </template>
           <template v-else>
             <div class="text-center py-12">
@@ -47,7 +47,7 @@
               </h3>
               <div class="space-x-4">
                 <button
-                  @click="createNewResume"
+                  @click="createNewCurriculum"
                   class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                 >
                   Criar Novo
@@ -90,6 +90,9 @@ import {
 } from '@heroicons/vue/24/outline'
 import BasicInfoEditor from '~/components/BasicInfoEditor.vue'
 import WorkExperienceEditor from '~/components/WorkExperienceEditor.vue'
+import EducationEditor from '~/components/EducationEditor.vue'
+import type { Curriculum } from './types/curriculum' // Importa o tipo Curriculum
+type ActiveSection = keyof Curriculum;
 
 const sections = [
   { id: 'basics', icon: UserIcon, title: 'Informações Básicas' },
@@ -104,9 +107,9 @@ const sections = [
   { id: 'references', icon: UserGroupIcon, title: 'Referências' }
 ]
 
-const resume = ref(null)
-const activeSection = ref(null)
-const fileInput = ref(null)
+const curriculum = ref<Curriculum | null>(null) // Define o tipo do curriculum
+const activeSection = ref<string | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
 
 const getActiveSectionTitle = () => {
   const section = sections.find(s => s.id === activeSection.value)
@@ -117,13 +120,14 @@ const getEditorComponent = () => {
   const componentMap = {
     basics: BasicInfoEditor,
     work: WorkExperienceEditor,
-    // Add other section editors as they are created
+    education: EducationEditor
+    // Adicione outros editores conforme necessário
   }
-  return componentMap[activeSection.value]
+  return activeSection.value ? componentMap[activeSection.value as keyof typeof componentMap] : null
 }
 
-const createNewResume = () => {
-  resume.value = {
+const createNewCurriculum = () => {
+  curriculum.value = {
     meta: {
       formatVersion: '1.0.0',
       createdAt: new Date().toISOString(),
@@ -140,7 +144,14 @@ const createNewResume = () => {
       profiles: []
     },
     work: [],
-    // Add other sections as needed
+    education: [],
+    certifications: [],
+    skills: [],
+    volunteer: [],
+    awards: [],
+    publications: [],
+    interests: [],
+    references: []
   }
   activeSection.value = 'basics'
 }
@@ -155,7 +166,8 @@ const handleFileUpload = async (event: Event) => {
 
   try {
     const text = await file.text()
-    resume.value = JSON.parse(text)
+    const parsedCurriculum = JSON.parse(text) as Curriculum
+    curriculum.value = parsedCurriculum
     activeSection.value = 'basics'
   } catch (error) {
     alert('Erro ao carregar o arquivo. Certifique-se que é um arquivo .curriculum válido.')

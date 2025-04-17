@@ -1,0 +1,202 @@
+<template>
+    <div class="education-editor w-full">
+      <div class="space-y-6">
+        <div
+          v-for="(education, index) in localEducation"
+          :key="index"
+          class="mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200 relative"
+        >
+          <button
+            type="button"
+            @click="removeEducation(index)"
+            class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded"
+          >
+            <XMarkIcon class="w-3 h-3" />
+          </button>
+
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div class="col-span-2">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="institution">
+                Instituição
+              </label>
+              <input
+                v-model="education.institution"
+                type="text"
+                placeholder="Nome da instituição*"
+                required
+                class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="studyType">
+                Tipo de Estudo
+              </label>
+              <select
+                v-model="education.studyType"
+                class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              >
+                <option value="Associate">Associate</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Master">Master</option>
+                <option value="PhD">PhD</option>
+                <option value="Technologist">Technologist</option>
+                <option value="Certificate">Certificate</option>
+                <option value="Diploma">Diploma</option>
+                <option value="HighSchool">High School</option>
+                <option value="Specialization">Specialization</option>
+                <option value="PostGraduate">Post Graduate</option>
+                <option value="TeachingDegree">Teaching Degree</option>
+                <option value="Other">Outro</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="area">
+                Área de Estudo
+              </label>
+              <input
+                v-model="education.area"
+                type="text"
+                placeholder="Área de estudo*"
+                required
+                class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
+                Data de Início
+              </label>
+              <input
+                v-model="education.startDate"
+                type="month"
+                required
+                class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">
+                Data de Término
+              </label>
+              <input
+                v-model="education.endDate"
+                type="month"
+                placeholder="Deixe em branco se ainda estiver cursando"
+                class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <div class="col-span-2">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="courses">
+                Cursos
+              </label>
+              <div
+                v-if="education && education.courses"
+                v-for="(course, courseIndex) in education.courses"
+                :key="courseIndex"
+                class="flex items-center gap-2 mb-2"
+              >
+                <input
+                  v-model="education.courses[courseIndex]"
+                  type="text"
+                  placeholder="Nome do curso"
+                  class="flex-grow px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  @click="removeCourse(index, courseIndex)"
+                  class="bg-red-500 text-white text-xs px-2 py-1 rounded"
+                >
+                  <XMarkIcon class="w-3 h-3" />
+                </button>
+              </div>
+              <button
+                type="button"
+                @click="addCourse(index)"
+                class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Adicionar Curso
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          @click="addEducation"
+          class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-2"
+        >
+          Adicionar Educação
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <script setup lang="ts">
+  import { XMarkIcon } from '@heroicons/vue/24/outline'
+  import { ref, watch } from 'vue'
+  import type { Curriculum } from '../types/curriculum'
+
+  // Define props com o tipo Curriculum['education']
+  const props = defineProps({
+    modelValue: {
+      type: Array as () => Curriculum['education'],
+      required: true
+    }
+  })
+
+  const emit = defineEmits(['update:modelValue'])
+
+  // Cria uma cópia local do modelValue com o tipo correto
+  const localEducation = ref<Curriculum['education']>(
+    props.modelValue.map(education => ({
+      institution: education.institution || '',
+      studyType: education.studyType || '',
+      area: education.area || '',
+      startDate: education.startDate || '',
+      endDate: education.endDate || '',
+      courses: education.courses || []
+    }))
+  )
+
+  // Observa mudanças e emite atualizações
+  watch(localEducation, (newValue) => {
+    // Valida campos obrigatórios antes de emitir
+    const validEducation = newValue.filter(education =>
+      education.institution &&
+      education.area &&
+      education.startDate
+    )
+
+    emit('update:modelValue', validEducation)
+  }, { deep: true })
+
+  // Função para adicionar uma nova entrada de educação
+  function addEducation() {
+    localEducation.value.push({
+      institution: '',
+      studyType: '',
+      area: '',
+      startDate: '',
+      endDate: '',
+      courses: []
+    })
+  }
+
+  // Função para remover uma entrada de educação
+  function removeEducation(index: number) {
+    localEducation.value.splice(index, 1)
+  }
+
+  // Função para adicionar um curso
+  function addCourse(educationIndex: number) {
+    localEducation.value[educationIndex].courses?.push('')
+  }
+
+  // Função para remover um curso
+  function removeCourse(educationIndex: number, courseIndex: number) {
+    localEducation.value[educationIndex].courses?.splice(courseIndex, 1)
+  }
+  </script>

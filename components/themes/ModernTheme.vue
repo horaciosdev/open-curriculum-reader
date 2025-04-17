@@ -3,7 +3,7 @@
       <!-- Informações Básicas -->
       <div v-if="resume.basics" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 rounded-xl shadow-lg">
         <div class="flex items-start gap-8">
-          <div 
+          <div
             v-if="!resume.basics.image || imageLoadError"
             class="w-40 h-40 rounded-xl bg-blue-600 text-white flex items-center justify-center text-5xl font-bold shadow-lg"
           >
@@ -103,7 +103,7 @@
                   <div class="flex justify-between items-start">
                     <h3 class="text-xl font-semibold text-gray-900">{{ edu.institution }}</h3>
                     <span class="text-blue-600 font-medium">
-                      {{ formatDate(edu.startDate) }} - {{ formatDate(edu.endDate) }}
+                      {{ formatDate(edu.startDate) }} - {{ formatDate(edu.endDate ?? 'Presente') }}
                     </span>
                   </div>
                   <div class="text-lg text-gray-600">{{ edu.studyType }} em {{ edu.area }}</div>
@@ -283,37 +283,35 @@
     </div>
   </template>
 
-  <script setup lang="ts">
-  import { computed, ref } from 'vue'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import type { Curriculum } from '@/types/curriculum' // Ajuste o caminho conforme necessário
 
-  const props = defineProps({
-    resume: {
-      type: Object,
-      required: true
+const props = defineProps<{
+  resume: Curriculum
+}>()
+
+const imageLoadError = ref(false)
+
+const formatDate = (date: string) => {
+  if (!date) return ''
+  const [year, month] = date.split('-')
+  return `${month}/${year}`
+}
+
+const groupedSkills = computed(() => {
+  if (!props.resume.skills) return {}
+  return props.resume.skills.reduce((acc, skill) => {
+    const category = skill.category || 'other'
+    if (!acc[category]) {
+      acc[category] = []
     }
-  })
+    acc[category].push(skill)
+    return acc
+  }, {} as Record<string, Curriculum['skills']>)
+})
 
-  const imageLoadError = ref(false)
-
-  const formatDate = (date: string) => {
-    if (!date) return ''
-    const [year, month] = date.split('-')
-    return `${month}/${year}`
-  }
-
-  const groupedSkills = computed(() => {
-    if (!props.resume.skills) return {}
-    return props.resume.skills.reduce((acc, skill) => {
-      const category = skill.category || 'other'
-      if (!acc[category]) {
-        acc[category] = []
-      }
-      acc[category].push(skill)
-      return acc
-    }, {})
-  })
-
-  const onImageError = () => {
-    imageLoadError.value = true
-  }
-  </script>
+const onImageError = () => {
+  imageLoadError.value = true
+}
+</script>

@@ -16,13 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref,computed } from 'vue'
+import { ref, computed } from 'vue'
 import ClassicTheme from './themes/ClassicTheme.vue'
 import ModernTheme from './themes/ModernTheme.vue'
+import type { Curriculum } from '../types/curriculum' // Importa o tipo Curriculum
 
 const props = defineProps({
   resume: {
-    type: Object,
+    type: Object as () => Curriculum, // Aplica o tipo Curriculum
     required: true
   }
 })
