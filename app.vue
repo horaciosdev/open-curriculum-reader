@@ -91,6 +91,7 @@ import {
 import BasicInfoEditor from '~/components/BasicInfoEditor.vue'
 import WorkExperienceEditor from '~/components/WorkExperienceEditor.vue'
 import EducationEditor from '~/components/EducationEditor.vue'
+import CertificationsEditor from './components/CertificationsEditor.vue'
 import type { Curriculum } from './types/curriculum' // Importa o tipo Curriculum
 type ActiveSection = keyof Curriculum;
 
@@ -120,7 +121,8 @@ const getEditorComponent = () => {
   const componentMap = {
     basics: BasicInfoEditor,
     work: WorkExperienceEditor,
-    education: EducationEditor
+    education: EducationEditor,
+    certifications: CertificationsEditor
     // Adicione outros editores conforme necessário
   }
   return activeSection.value ? componentMap[activeSection.value as keyof typeof componentMap] : null
