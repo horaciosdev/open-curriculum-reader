@@ -292,6 +292,7 @@ const handleImageUpload = (event: any) => {
   const reader = new FileReader()
   reader.onload = () => {
     localBasicInfo.value.image = reader.result as string
+    emit('update:modelValue', { ...localBasicInfo.value, image: reader.result as string }) // Atualiza o modelo
   }
   reader.readAsDataURL(file)
 }
@@ -321,6 +322,7 @@ const handleDrop = (event: any) => {
   const reader = new FileReader()
   reader.onload = () => {
     localBasicInfo.value.image = reader.result as string
+    emit('update:modelValue', { ...localBasicInfo.value, image: reader.result as string }) // Atualiza o modelo
   }
   reader.readAsDataURL(file)
 }
