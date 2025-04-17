@@ -1,5 +1,51 @@
 <template>
   <div class="basic-info-editor w-full">
+    <div class="mb-6 flex justify-center relative">
+      <input 
+        type="file" 
+        ref="imageUpload"
+        @change="handleImageUpload"
+        accept="image/*" 
+        class="hidden"
+      />
+      <div 
+        @click="triggerImageUpload"
+        @dragover.prevent="dragOver"
+        @dragleave.prevent="dragLeave"
+        @drop.prevent="handleDrop"
+        :class="[
+          'relative w-40 h-40 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors group',
+          isDragging ? 'bg-blue-100 border-blue-300' : 'bg-gray-100 border-dashed border-gray-300 hover:bg-gray-200'
+        ]"
+      >
+        <div 
+          v-if="!localBasicInfo.image" 
+          class="text-center text-gray-500 flex flex-col items-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="text-sm">
+            {{ isDragging ? 'Solte a imagem aqui' : 'Adicionar Foto' }}
+          </span>
+        </div>
+        <img 
+          v-else
+          :src="localBasicInfo.image" 
+          alt="Profile" 
+          class="w-full h-full object-cover rounded-full"
+        />
+        <button 
+          v-if="localBasicInfo.image"
+          @click.stop="removeImage"
+          class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+        >
+          <XMarkIcon class="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+
     <div class="space-y-6">
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -221,6 +267,45 @@ const addProfile = () => {
 
 const removeProfile = (index: number) => {
   localBasicInfo.value.profiles.splice(index, 1)
+}
+
+const imageUpload = ref(null)
+
+const handleImageUpload = (event: any) => {
+  const file = event.target.files[0]
+  const reader = new FileReader()
+  reader.onload = () => {
+    localBasicInfo.value.image = reader.result
+  }
+  reader.readAsDataURL(file)
+}
+
+const triggerImageUpload = () => {
+  imageUpload.value.click()
+}
+
+const removeImage = () => {
+  localBasicInfo.value.image = ''
+}
+
+const isDragging = ref(false)
+
+const dragOver = () => {
+  isDragging.value = true
+}
+
+const dragLeave = () => {
+  isDragging.value = false
+}
+
+const handleDrop = (event: any) => {
+  isDragging.value = false
+  const file = event.dataTransfer.files[0]
+  const reader = new FileReader()
+  reader.onload = () => {
+    localBasicInfo.value.image = reader.result
+  }
+  reader.readAsDataURL(file)
 }
 </script>
 
