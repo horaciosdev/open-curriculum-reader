@@ -3,33 +3,19 @@
     <div class="flex h-screen">
       <!-- Barra lateral esquerda com ícones -->
       <div class="w-16 bg-gray-800 flex flex-col items-center py-4 space-y-4">
-        <button
-          v-for="section in sections"
-          :key="section.id"
-          @click="activeSection = section.id"
+        <button v-for="section in sections" :key="section.id" @click="activeSection = section.id"
           class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
-          :class="{ 'bg-gray-700': activeSection === section.id }"
-        >
-          <component
-            :is="section.icon"
-            class="w-6 h-6 text-white"
-          />
+          :class="{ 'bg-gray-700': activeSection === section.id }">
+          <component :is="section.icon" class="w-6 h-6 text-white" />
         </button>
       </div>
 
       <!-- Painel de edição -->
-      <div
-        class="w-96 bg-white border-r border-gray-200 overflow-y-auto"
-        v-if="activeSection"
-      >
+      <div class="w-96 bg-white border-r border-gray-200 overflow-y-auto" v-if="activeSection">
         <div class="p-4">
           <h2 class="text-lg font-semibold mb-4">{{ getActiveSectionTitle() }}</h2>
           <!-- Componente de edição será renderizado aqui -->
-          <component
-            :is="getEditorComponent()"
-            v-if="curriculum"
-            v-model="curriculum[activeSection]"
-          />
+          <component :is="getEditorComponent()" v-if="curriculum" v-model="curriculum[activeSection]" />
         </div>
       </div>
 
@@ -39,27 +25,23 @@
           <template v-if="curriculum">
             <!-- Barra de ferramentas -->
             <div class="flex justify-between items-center mb-4">
-              <select
-                v-model="selectedTheme"
-                class="block w-48 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              >
+              <select v-model="selectedTheme"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option v-for="theme in themes" :key="theme.id" :value="theme.id">
                   {{ theme.name }}
                 </option>
               </select>
-              <button
-                @click="openFileInput"
-                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-              >
-                Carregar Novo Currículo
-              </button>
-              <input
-                ref="fileInput"
-                type="file"
-                accept=".curriculum"
-                class="hidden"
-                @change="handleFileUpload"
-              >
+              <div class="flex space-x-4">
+                <button @click="saveCurriculum"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  Salvar Currículo
+                </button>
+                <button @click="openFileInput"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  Carregar Novo Currículo
+                </button>
+                <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
+              </div>
             </div>
             <!-- Preview do currículo -->
             <CurriculumPreview :curriculum="curriculum" :selectedTheme="selectedTheme as 'classic' | 'modern'" />
@@ -70,25 +52,15 @@
                 Nenhum currículo carregado
               </h3>
               <div class="space-x-4">
-                <button
-                  @click="createNewCurriculum"
-                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                >
+                <button @click="createNewCurriculum"
+                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                   Criar Novo
                 </button>
-                <button
-                  @click="openFileInput"
-                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                >
+                <button @click="openFileInput"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                   Carregar Arquivo
                 </button>
-                <input
-                  ref="fileInput"
-                  type="file"
-                  accept=".curriculum"
-                  class="hidden"
-                  @change="handleFileUpload"
-                >
+                <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
               </div>
             </div>
           </template>
@@ -164,10 +136,10 @@ const getEditorComponent = () => {
     certifications: CertificationsEditor,
     skills: SkillsEditor,
     volunteer: VolunteerEditor,
-    awards : AwardsEditor,
+    awards: AwardsEditor,
     publications: PublicationsEditor,
-    interests : InterestsEditor,
-    references : ReferencesEditor
+    interests: InterestsEditor,
+    references: ReferencesEditor
     // Adicione outros editores conforme necessário
   }
   return activeSection.value ? componentMap[activeSection.value as keyof typeof componentMap] : null
@@ -219,5 +191,32 @@ const handleFileUpload = async (event: Event) => {
   } catch (error) {
     alert('Erro ao carregar o arquivo. Certifique-se que é um arquivo .curriculum válido.')
   }
+}
+
+const saveCurriculum = () => {
+  if (!curriculum.value) {
+    alert('Nenhum currículo disponível para salvar.')
+    return
+  }
+
+  // Formatar o nome do arquivo
+  const name = curriculum.value.basics?.name?.replace(/\s+/g, '-').toLowerCase() || 'curriculo'
+  const rule = curriculum.value.basics?.label?.replace(/\s+/g, '-').toLowerCase() || 'sem-titulo'
+  const year = new Date().getFullYear()
+  const fileName = `${name}-${rule}-${year}.curriculum`
+
+  // Criar o arquivo JSON
+  const fileContent = JSON.stringify(curriculum.value, null, 2)
+  const blob = new Blob([fileContent], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+
+  // Criar um link para download
+  const link = document.createElement('a')
+  link.href = url
+  link.download = fileName
+  link.click()
+
+  // Limpar o objeto URL
+  URL.revokeObjectURL(url)
 }
 </script>
