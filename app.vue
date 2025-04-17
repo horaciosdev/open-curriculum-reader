@@ -88,6 +88,8 @@ import {
   StarIcon,
   UserGroupIcon
 } from '@heroicons/vue/24/outline'
+import BasicInfoEditor from '~/components/BasicInfoEditor.vue'
+import WorkExperienceEditor from '~/components/WorkExperienceEditor.vue'
 
 const sections = [
   { id: 'basics', icon: UserIcon, title: 'Informações Básicas' },
@@ -112,7 +114,12 @@ const getActiveSectionTitle = () => {
 }
 
 const getEditorComponent = () => {
-  return `${activeSection.value}-editor`
+  const componentMap = {
+    basics: BasicInfoEditor,
+    work: WorkExperienceEditor,
+    // Add other section editors as they are created
+  }
+  return componentMap[activeSection.value]
 }
 
 const createNewResume = () => {
@@ -124,6 +131,7 @@ const createNewResume = () => {
     },
     basics: {
       name: '',
+      label: '',
       summary: '',
       location: {
         city: '',
@@ -132,24 +140,17 @@ const createNewResume = () => {
       profiles: []
     },
     work: [],
-    education: [],
-    certifications: [],
-    skills: [],
-    volunteer: [],
-    awards: [],
-    publications: [],
-    interests: [],
-    references: []
+    // Add other sections as needed
   }
   activeSection.value = 'basics'
 }
 
 const openFileInput = () => {
-  fileInput.value.click()
+  fileInput.value?.click()
 }
 
-const handleFileUpload = async (event) => {
-  const file = event.target.files[0]
+const handleFileUpload = async (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
 
   try {
