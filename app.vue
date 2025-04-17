@@ -32,12 +32,19 @@
                 </option>
               </select>
               <div class="flex space-x-4">
+                <button @click="printCurriculum"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  <PrinterIcon class="mr-2 h-5 w-5" />
+                  Imprimir
+                </button>
                 <button @click="saveCurriculum"
                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  <ArrowDownOnSquareIcon class="mr-2 h-5 w-5" />
                   Salvar Currículo
                 </button>
                 <button @click="openFileInput"
                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  <ArrowUpOnSquareIcon class="mr-2 h-5 w-5" />
                   Carregar Novo Currículo
                 </button>
                 <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
@@ -82,7 +89,10 @@ import {
   TrophyIcon,
   DocumentTextIcon,
   StarIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  ArrowUpOnSquareIcon,
+  ArrowDownOnSquareIcon,
+  PrinterIcon
 } from '@heroicons/vue/24/outline'
 import type { Curriculum } from '~/types/curriculum'
 
@@ -218,5 +228,9 @@ const saveCurriculum = () => {
 
   // Limpar o objeto URL
   URL.revokeObjectURL(url)
+}
+
+const printCurriculum = () => {
+  window.print()
 }
 </script>

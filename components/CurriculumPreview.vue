@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="curriculum-preview bg-white">
     <component :is="currentTheme" :curriculum="curriculum" :key="curriculumHash" />
   </div>
 </template>

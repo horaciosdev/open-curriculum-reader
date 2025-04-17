@@ -1,0 +1,58 @@
+/* Estilos para impressão */
+@media print {
+    /* Reset geral para impressão */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    /* Esconder elementos da interface */
+    header, nav, footer, .sidebar, .toolbar, button, select, input {
+      display: none !important;
+    }
+
+    /* Garantir que o currículo seja visível */
+    body {
+      background: white !important;
+      font-size: 12pt;
+    }
+
+    /* Garantir que as cores sejam impressas corretamente */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* Evita que o conteúdo seja cortado */
+    .curriculum-preview {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+    }
+
+    /* Ajustar links para mostrar o URL na impressão */
+    a[href]:after {
+      content: " (" attr(href) ")";
+    }
+
+    /* Adicionar quebra de página entre seções principais se necessário */
+    h2 {
+      page-break-before: auto;
+    }
+
+    /* Evita quebras de páginas inadequadas */
+    h2, h3, h4 {
+      page-break-after: avoid;
+    }
+
+    /* Evitar quebras indesejadas em elementos de um mesmo grupo */
+    ul, ol, li, p {
+      page-break-inside: avoid;
+    }
+  }
