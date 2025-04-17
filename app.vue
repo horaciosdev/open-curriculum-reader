@@ -37,8 +37,32 @@
       <div class="flex-1 overflow-y-auto p-8">
         <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
           <template v-if="curriculum">
-            <!-- Preview do currículo será renderizado aqui -->
-            <CurriculumPreview :curriculum="curriculum" />
+            <!-- Barra de ferramentas -->
+            <div class="flex justify-between items-center mb-4">
+              <select
+                v-model="selectedTheme"
+                class="block w-48 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              >
+                <option v-for="theme in themes" :key="theme.id" :value="theme.id">
+                  {{ theme.name }}
+                </option>
+              </select>
+              <button
+                @click="openFileInput"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Carregar Novo Currículo
+              </button>
+              <input
+                ref="fileInput"
+                type="file"
+                accept=".curriculum"
+                class="hidden"
+                @change="handleFileUpload"
+              >
+            </div>
+            <!-- Preview do currículo -->
+            <CurriculumPreview :curriculum="curriculum" :selectedTheme="selectedTheme as 'classic' | 'modern'" />
           </template>
           <template v-else>
             <div class="text-center py-12">
@@ -119,6 +143,13 @@ const sections = [
 const curriculum = ref<Curriculum | null>(null) // Define o tipo do curriculum
 const activeSection = ref<string | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
+
+const themes = [
+  { id: 'classic', name: 'Tema Clássico' },
+  { id: 'modern', name: 'Tema Moderno' }
+]
+
+const selectedTheme = ref('modern')
 
 const getActiveSectionTitle = () => {
   const section = sections.find(s => s.id === activeSection.value)

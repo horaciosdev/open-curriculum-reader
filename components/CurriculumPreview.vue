@@ -1,42 +1,32 @@
 <template>
   <div>
-    <div class="mb-6 flex justify-end">
-      <select
-        v-model="selectedTheme"
-        class="block w-48 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-      >
-        <option v-for="theme in themes" :key="theme.id" :value="theme.id">
-          {{ theme.name }}
-        </option>
-      </select>
-    </div>
-
     <component :is="currentTheme" :curriculum="curriculum" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import ClassicTheme from './themes/ClassicTheme.vue'
 import ModernTheme from './themes/ModernTheme.vue'
-import type { Curriculum } from '../types/curriculum' // Importa o tipo Curriculum
+import type { Curriculum } from '../types/curriculum'
 
 const props = defineProps({
   curriculum: {
-    type: Object as () => Curriculum, // Aplica o tipo Curriculum
+    type: Object as () => Curriculum,
+    required: true
+  },
+  selectedTheme: {
+    type: String as PropType<'classic' | 'modern'>,
     required: true
   }
 })
 
-const themes = [
-  { id: 'classic', name: 'Tema Clássico', component: ClassicTheme },
-  { id: 'modern', name: 'Tema Moderno', component: ModernTheme }
-]
+// Mapeamento de temas disponíveis
+const themes = {
+  classic: ClassicTheme,
+  modern: ModernTheme
+}
 
-const selectedTheme = ref('modern')
-
-const currentTheme = computed(() => {
-  const theme = themes.find(t => t.id === selectedTheme.value)
-  return theme ? theme.component : ModernTheme
-})
+// Computa o tema atual com base na prop `selectedTheme`
+const currentTheme = computed(() => themes[props.selectedTheme as keyof typeof themes] || ModernTheme)
 </script>
