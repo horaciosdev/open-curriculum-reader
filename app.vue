@@ -50,9 +50,9 @@
                 <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
               </div>
               <button @click="createNewCurriculum"
-                class="inline-flex items-center justify-center w-12 h-12 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                <PlusIcon class="h-5 w-5 font-bold" />
-              </button>
+                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                  Criar Novo
+                </button>
             </div>
             <!-- Preview do currículo -->
             <CurriculumPreview :curriculum="curriculum" :selectedTheme="selectedTheme as 'classic' | 'modern'" />
