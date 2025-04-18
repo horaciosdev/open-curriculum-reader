@@ -103,7 +103,7 @@
                   <div class="flex justify-between items-start">
                     <h3 class="text-xl font-semibold text-gray-900">{{ edu.institution }}</h3>
                     <span class="text-blue-600 font-medium">
-                      {{ formatDate(edu.startDate) }} - {{ formatDate(edu.endDate ?? 'Presente') }}
+                      {{ formatDate(edu.startDate) }} - {{ edu.endDate ? formatDate(edu.endDate) : 'Presente' }}
                     </span>
                   </div>
                   <div class="text-lg text-gray-600">{{ edu.studyType }} em {{ edu.area }}</div>
