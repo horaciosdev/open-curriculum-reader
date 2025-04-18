@@ -5,10 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import ClassicTheme from './themes/ClassicTheme.vue'
-import ModernTheme from './themes/ModernTheme.vue'
-import type { Curriculum } from '../types/curriculum'
+import { computed, ref, onMounted } from 'vue'
+import type { Curriculum } from '~/types/curriculum'
 
 const props = defineProps({
   curriculum: {
@@ -16,19 +14,37 @@ const props = defineProps({
     required: true
   },
   selectedTheme: {
-    type: String as PropType<'classic' | 'modern'>,
+    type: String,
     required: true
   }
 })
 
-// Mapeamento de temas disponíveis
-const themes = {
-  classic: ClassicTheme,
-  modern: ModernTheme
+const themeComponents = ref<Record<string, any>>({})
+
+// Carrega dinamicamente todos os temas
+interface ThemeModule {
+  default: Component
 }
 
-// Computa o tema atual com base na prop `selectedTheme`
-const currentTheme = computed(() => themes[props.selectedTheme as keyof typeof themes] || ModernTheme)
+onMounted(async () => {
+  const modules = import.meta.glob<ThemeModule>('./themes/*Theme.vue')
+
+  for (const path in modules) {
+    try {
+      const module = await modules[path]()
+      const fileName = path.split('/').pop()?.replace('.vue', '') || ''
+      const themeId = fileName.replace('Theme', '').toLowerCase()
+
+      themeComponents.value[themeId] = module.default
+    } catch (error) {
+      console.error(`Erro ao carregar tema ${path}:`, error)
+    }
+  }
+})
+
+const currentTheme = computed(() => {
+  return themeComponents.value[props.selectedTheme] || Object.values(themeComponents.value)[0]
+})
 
 const curriculumHash = computed(() => {
   return JSON.stringify(props.curriculum) + Date.now()

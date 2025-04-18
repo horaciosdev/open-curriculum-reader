@@ -129,12 +129,8 @@ const curriculum = ref<Curriculum | null>(null) // Define o tipo do curriculum
 const activeSection = ref<string | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 
-const themes = [
-  { id: 'classic', name: 'Tema Clássico' },
-  { id: 'modern', name: 'Tema Moderno' }
-]
-
-const selectedTheme = ref('modern')
+const { data: themes } = useFetch('/api/themes')
+const selectedTheme = ref('')
 
 const getActiveSectionTitle = () => {
   const section = sections.find(s => s.id === activeSection.value)
@@ -193,6 +189,10 @@ const createNewCurriculum = () => {
     references: []
   }) as Curriculum
 
+  if (themes.value && themes.value.length > 0) {
+    selectedTheme.value = themes.value[0].id
+  }
+
   setTimeout(() => {
     activeSection.value = 'basics'
   }, 100)
@@ -213,6 +213,10 @@ const handleFileUpload = async (event: Event) => {
     const parsedCurriculum = JSON.parse(text) as Curriculum
     curriculum.value = parsedCurriculum
     activeSection.value = 'basics'
+
+    if (themes.value && themes.value.length > 0) {
+      selectedTheme.value = themes.value[0].id
+    }
   } catch (error) {
     alert('Erro ao carregar o arquivo. Certifique-se que é um arquivo .curriculum válido.')
   }
