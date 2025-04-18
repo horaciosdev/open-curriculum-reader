@@ -99,12 +99,7 @@ const localInterests = ref<Curriculum['interests']>(
 
 // Observa mudanças e emite atualizações
 watch(localInterests, (newValue) => {
-  // Valida campos obrigatórios antes de emitir
-  const validInterests = newValue?.filter(interest =>
-    interest.name
-  )
-
-  emit('update:modelValue', validInterests)
+  emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar um novo interesse

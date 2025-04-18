@@ -97,14 +97,7 @@ const localVolunteer = ref<Curriculum['volunteer']>(
 
 // Observa mudanças e emite atualizações
 watch(localVolunteer, (newValue) => {
-    // Valida campos obrigatórios antes de emitir
-    const validVolunteer = newValue?.filter(volunteer =>
-        volunteer.organization &&
-        volunteer.position &&
-        volunteer.startDate
-    )
-
-    emit('update:modelValue', validVolunteer)
+    emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar um novo trabalho voluntário

@@ -163,14 +163,7 @@
 
   // Observa mudanças e emite atualizações
   watch(localEducation, (newValue) => {
-    // Valida campos obrigatórios antes de emitir
-    const validEducation = newValue.filter(education =>
-      education.institution &&
-      education.area &&
-      education.startDate
-    )
-
-    emit('update:modelValue', validEducation)
+    emit('update:modelValue', newValue)
   }, { deep: true })
 
   // Função para adicionar uma nova entrada de educação

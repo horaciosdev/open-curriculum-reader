@@ -92,14 +92,7 @@ const localAwards = ref<Curriculum['awards']>(
 
 // Observa mudanças e emite atualizações
 watch(localAwards, (newValue) => {
-  // Valida campos obrigatórios antes de emitir
-  const validAwards = newValue?.filter(award =>
-    award.title &&
-    award.date &&
-    award.awarder
-  )
-
-  emit('update:modelValue', validAwards)
+  emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar um novo prêmio

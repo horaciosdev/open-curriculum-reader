@@ -78,14 +78,7 @@ const localCertifications = ref<Curriculum['certifications']>(
 
 // Observa mudanças e emite atualizações
 watch(localCertifications, (newValue) => {
-    // Valida campos obrigatórios antes de emitir
-    const validCertifications = newValue?.filter(certification =>
-        certification.name &&
-        certification.issuer &&
-        certification.date
-    )
-
-    emit('update:modelValue', validCertifications)
+    emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar uma nova certificação

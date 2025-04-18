@@ -106,15 +106,7 @@ const localPublications = ref<Curriculum['publications']>(
 
 // Observa mudanças e emite atualizações
 watch(localPublications, (newValue) => {
-  // Valida campos obrigatórios antes de emitir
-  const validPublications = newValue?.filter(publication =>
-    publication.name &&
-    publication.publisher &&
-    publication.releaseDate &&
-    publication.url
-  )
-
-  emit('update:modelValue', validPublications)
+  emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar uma nova publicação

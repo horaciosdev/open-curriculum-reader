@@ -78,13 +78,7 @@ const localReferences = ref<Curriculum['references']>(
 
 // Observa mudanças e emite atualizações
 watch(localReferences, (newValue) => {
-  // Valida campos obrigatórios antes de emitir
-  const validReferences = newValue?.filter(reference =>
-    reference.name &&
-    reference.reference
-  )
-
-  emit('update:modelValue', validReferences)
+  emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar uma nova referência

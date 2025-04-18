@@ -123,13 +123,7 @@ const localSkills = ref<Curriculum['skills']>(
 
 // Observa mudanças e emite atualizações
 watch(localSkills, (newValue) => {
-  // Valida campos obrigatórios antes de emitir
-  const validSkills = newValue?.filter(skill =>
-    skill.name &&
-    skill.category
-  )
-
-  emit('update:modelValue', validSkills)
+  emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar uma nova habilidade

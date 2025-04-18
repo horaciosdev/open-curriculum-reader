@@ -236,7 +236,7 @@ const localBasicInfo = ref<Curriculum['basics']>({
     address: props.modelValue.location?.address || '',
     city: props.modelValue.location.city || '',
     region: props.modelValue.location?.region || '',
-    countryCode: props.modelValue.location.countryCode || 'BR'
+    countryCode: props.modelValue.location.countryCode || ''
   },
   profiles: props.modelValue.profiles || []
 })
@@ -245,16 +245,8 @@ const localBasicInfo = ref<Curriculum['basics']>({
 watch(
   localBasicInfo,
   (newValue) => {
-    // Valida campos obrigatórios antes de emitir
-    if (
-      newValue.name &&
-      newValue.summary &&
-      newValue.location.city &&
-      newValue.location.countryCode &&
-      newValue.profiles.length > 0
-    ) {
-      emit('update:modelValue', newValue)
-    }
+    // Emite atualizações sempre, sem validação condicional
+    emit('update:modelValue', newValue)
   },
   { deep: true }
 )

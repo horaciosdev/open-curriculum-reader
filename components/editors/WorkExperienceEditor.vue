@@ -169,14 +169,7 @@ const isCurrentJob = computed(() => (index: number) => {
 
 // Assistir mudanças e emitir atualizações
 watch(localWorkExperience, (newValue) => {
-  // Validar campos obrigatórios antes de emitir
-  const validWorkExperiences = newValue.filter(work =>
-    work.organization &&
-    work.position &&
-    work.startDate
-  )
-
-  emit('update:modelValue', validWorkExperiences)
+  emit('update:modelValue', newValue)
 }, { deep: true })
 
 // Função para adicionar uma nova experiência profissional
