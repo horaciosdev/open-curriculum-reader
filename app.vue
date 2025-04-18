@@ -49,6 +49,10 @@
                 </button>
                 <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
               </div>
+              <button @click="createNewCurriculum"
+                class="inline-flex items-center justify-center w-12 h-12 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                <PlusIcon class="h-5 w-5 font-bold" />
+              </button>
             </div>
             <!-- Preview do currículo -->
             <CurriculumPreview :curriculum="curriculum" :selectedTheme="selectedTheme as 'classic' | 'modern'" />
@@ -78,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import {
   UserIcon,
   BriefcaseIcon,
@@ -92,7 +96,8 @@ import {
   UserGroupIcon,
   ArrowUpOnSquareIcon,
   ArrowDownOnSquareIcon,
-  PrinterIcon
+  PrinterIcon,
+  PlusIcon
 } from '@heroicons/vue/24/outline'
 import type { Curriculum } from '~/types/curriculum'
 
@@ -106,8 +111,6 @@ import AwardsEditor from '~/components/editors/AwardsEditor.vue'
 import PublicationsEditor from '~/components/editors/PublicationsEditor.vue'
 import InterestsEditor from '~/components/editors/InterestsEditor.vue'
 import ReferencesEditor from '~/components/editors/ReferencesEditor.vue'
-
-type ActiveSection = keyof Curriculum;
 
 const sections = [
   { id: 'basics', icon: UserIcon, title: 'Informações Básicas' },
@@ -156,21 +159,28 @@ const getEditorComponent = () => {
 }
 
 const createNewCurriculum = () => {
-  curriculum.value = {
+  activeSection.value = null
+
+  curriculum.value = Object.assign({}, {
     meta: {
       formatVersion: '1.0.0',
       createdAt: new Date().toISOString(),
       language: 'pt'
     },
     basics: {
-      name: '',
-      label: '',
-      summary: '',
+      name: 'Currículo Exemplo',
+      label: 'Desenvolvedor Web',
+      summary: 'Desenvolvedor web com experiência em Vue.js e Node.js.',
       location: {
-        city: '',
-        countryCode: 'BR'
+        city: 'Porto Alegre',
+        countryCode: 'BR',
       },
-      profiles: []
+      profiles: [{
+        network: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/exemplo',
+        username: 'exemplo'
+      }],
+      identifiers: []
     },
     work: [],
     education: [],
@@ -181,8 +191,11 @@ const createNewCurriculum = () => {
     publications: [],
     interests: [],
     references: []
-  }
-  activeSection.value = 'basics'
+  }) as Curriculum
+
+  setTimeout(() => {
+    activeSection.value = 'basics'
+  }, 100)
 }
 
 const openFileInput = () => {
@@ -192,6 +205,8 @@ const openFileInput = () => {
 const handleFileUpload = async (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
+
+  activeSection.value = null;
 
   try {
     const text = await file.text()
