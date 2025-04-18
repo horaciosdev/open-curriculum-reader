@@ -90,7 +90,7 @@
                 <div v-if="edu.score" class="text-gray-500">Nota: {{ edu.score }}</div>
               </div>
               <div class="text-sm text-gray-500 italic">
-                {{ formatDate(edu.startDate) }} - {{ formatDate(edu.endDate ?? 'Presente') }}
+                {{ formatDate(edu.startDate) }} - {{ edu.endDate ? formatDate(edu.endDate) : 'Presente' }}
               </div>
             </div>
             <ul v-if="edu.courses?.length" class="mt-2 list-disc list-inside text-gray-700">
