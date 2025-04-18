@@ -70,7 +70,7 @@
               </label>
               <input
                 v-model="education.startDate"
-                type="month"
+                type="date"
                 required
                 class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -82,7 +82,7 @@
               </label>
               <input
                 v-model="education.endDate"
-                type="month"
+                type="date"
                 placeholder="Deixe em branco se ainda estiver cursando"
                 class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -155,8 +155,8 @@
       institution: education.institution || '',
       studyType: education.studyType || '',
       area: education.area || '',
-      startDate: education.startDate || '',
-      endDate: education.endDate || '',
+      startDate: education.startDate ? education.startDate.split('T')[0] : '',
+      endDate: education.endDate ? education.endDate.split('T')[0] : '',
       courses: education.courses || []
     }))
   )

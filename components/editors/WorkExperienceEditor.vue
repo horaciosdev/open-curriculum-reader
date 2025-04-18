@@ -59,7 +59,7 @@
             </label>
             <input
               v-model="work.startDate"
-              type="month"
+              type="date"
               required
               class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
@@ -71,7 +71,7 @@
             </label>
             <input
               v-model="work.endDate"
-              type="month"
+              type="date"
               placeholder="Deixe em branco para emprego atual"
               class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
@@ -156,8 +156,8 @@ const localWorkExperience = ref<Curriculum['work']>(
     organization: work.organization || '',
     position: work.position || '',
     url: work.url || '',
-    startDate: work.startDate || '',
-    endDate: work.endDate ?? null,
+    startDate: work.startDate ? work.startDate.split('T')[0] : '', // Garante o formato YYYY-MM-DD
+    endDate: work.endDate ? work.endDate.split('T')[0] : null, // Garante o formato YYYY-MM-DD ou null
     highlights: work.highlights || []
   }))
 )
