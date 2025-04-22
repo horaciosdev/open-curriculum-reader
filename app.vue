@@ -47,7 +47,7 @@
                   <ArrowUpOnSquareIcon class="mr-2 h-5 w-5" />
                   Carregar Novo Currículo
                 </button>
-                <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
+                <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
               </div>
               <button @click="createNewCurriculum"
                   class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
@@ -71,7 +71,7 @@
                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                   Carregar Arquivo
                 </button>
-                <input ref="fileInput" type="file" accept=".curriculum" class="hidden" @change="handleFileUpload">
+                <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
               </div>
             </div>
           </template>
@@ -218,7 +218,7 @@ const handleFileUpload = async (event: Event) => {
       selectedTheme.value = themes.value[0].id
     }
   } catch (error) {
-    alert('Erro ao carregar o arquivo. Certifique-se que é um arquivo .curriculum válido.')
+    alert('Erro ao carregar o arquivo. Certifique-se que é um arquivo .cvt válido.')
   }
 }
 
@@ -232,7 +232,7 @@ const saveCurriculum = () => {
   const name = curriculum.value.basics?.name?.replace(/\s+/g, '-').toLowerCase() || 'curriculo'
   const rule = curriculum.value.basics?.label?.replace(/\s+/g, '-').toLowerCase() || 'sem-titulo'
   const year = new Date().getFullYear()
-  const fileName = `${name}-${rule}-${year}.curriculum`
+  const fileName = `${name}-${rule}-${year}.cvt`
 
   // Criar o arquivo JSON
   const fileContent = JSON.stringify(curriculum.value, null, 2)
