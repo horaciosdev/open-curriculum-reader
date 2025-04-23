@@ -21,39 +21,47 @@
 
       <!-- Visualização do currículo -->
       <div class="flex-1 overflow-y-auto p-8">
+
+        <!-- Barra de ferramentas -->
+        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-4 mb-4">
+
+          <div class="flex justify-between items-center mb-4">
+            <select v-model="selectedTheme"
+              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option v-for="theme in themes" :key="theme.id" :value="theme.id">
+                {{ theme.name }}
+              </option>
+            </select>
+
+            <button @click="createNewCurriculum"
+              class="inline-flex items-center px-4 py-1 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+              Criar Novo
+            </button>
+          </div>
+
+          <div class="flex flex-wrap gap-2 justify-start items-center">
+            <button @click="printCurriculum"
+              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+              <PrinterIcon class="mr-2 h-5 w-5" />
+              Imprimir
+            </button>
+            <button @click="saveCurriculum"
+              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+              <ArrowDownOnSquareIcon class="mr-2 h-5 w-5" />
+              Salvar Currículo
+            </button>
+            <button @click="openFileInput"
+              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+              <ArrowUpOnSquareIcon class="mr-2 h-5 w-5" />
+              Carregar Novo Currículo
+            </button>
+            <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
+          </div>
+
+        </div>
+
         <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
           <template v-if="curriculum">
-            <!-- Barra de ferramentas -->
-            <div class="flex justify-between items-center mb-4">
-              <select v-model="selectedTheme"
-                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option v-for="theme in themes" :key="theme.id" :value="theme.id">
-                  {{ theme.name }}
-                </option>
-              </select>
-              <div class="flex space-x-4">
-                <button @click="printCurriculum"
-                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                  <PrinterIcon class="mr-2 h-5 w-5" />
-                  Imprimir
-                </button>
-                <button @click="saveCurriculum"
-                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                  <ArrowDownOnSquareIcon class="mr-2 h-5 w-5" />
-                  Salvar Currículo
-                </button>
-                <button @click="openFileInput"
-                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                  <ArrowUpOnSquareIcon class="mr-2 h-5 w-5" />
-                  Carregar Novo Currículo
-                </button>
-                <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
-              </div>
-              <button @click="createNewCurriculum"
-                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                  Criar Novo
-                </button>
-            </div>
             <!-- Preview do currículo -->
             <CurriculumPreview :curriculum="curriculum" :selectedTheme="selectedTheme as 'classic' | 'modern'" />
           </template>
@@ -216,12 +224,12 @@ const handleFileUpload = async (event: Event) => {
     const validationErrors = validate(text)
 
     console.log('Validation Errors:', validationErrors)
-    
+
     // Check if validation failed
     if (validationErrors === null) {
       throw new Error('Erro ao fazer o parsing do arquivo CVT')
     }
-    
+
     if (validationErrors.length > 0) {
       // If there are validation errors, show them
       const errorMessage = validationErrors.join('\n')
