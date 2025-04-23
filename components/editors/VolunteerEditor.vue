@@ -45,7 +45,8 @@
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="highlights">
                             Destaques
                         </label>
-                        <div v-if="Array.isArray(volunteer.highlights)" v-for="(highlight, highlightIndex) in volunteer.highlights" :key="highlightIndex"
+                        <div v-if="Array.isArray(volunteer.highlights)"
+                            v-for="(highlight, highlightIndex) in volunteer.highlights" :key="highlightIndex"
                             class="flex items-center gap-2 mb-2">
                             <input v-model="volunteer.highlights[highlightIndex]" type="text" placeholder="Destaque"
                                 class="flex-grow px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
@@ -89,8 +90,8 @@ const localVolunteer = ref<Curriculum['volunteer']>(
     (props.modelValue || []).map(volunteer => ({
         organization: volunteer.organization || '',
         position: volunteer.position || '',
-        startDate: volunteer.startDate || '',
-        endDate: volunteer.endDate ?? null, // Garante que endDate seja null ou string
+        startDate: volunteer.startDate ? volunteer.startDate.split('T')[0] : '',
+        endDate: volunteer.endDate ? volunteer.endDate.split('T')[0] : '',
         highlights: volunteer.highlights || []
     }))
 )

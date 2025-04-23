@@ -1,46 +1,26 @@
 <template>
   <div class="basic-info-editor w-full">
     <div class="mb-6 flex justify-center relative">
-      <input
-        type="file"
-        ref="imageUpload"
-        @change="handleImageUpload"
-        accept="image/*"
-        class="hidden"
-      />
-      <div
-        @click="triggerImageUpload"
-        @dragover.prevent="dragOver"
-        @dragleave.prevent="dragLeave"
-        @drop.prevent="handleDrop"
-        :class="[
+      <input type="file" ref="imageUpload" @change="handleImageUpload" accept="image/*" class="hidden" />
+      <div @click="triggerImageUpload" @dragover.prevent="dragOver" @dragleave.prevent="dragLeave"
+        @drop.prevent="handleDrop" :class="[
           'relative w-40 h-40 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors group',
           isDragging ? 'bg-blue-100 border-blue-300' : 'bg-gray-100 border-dashed border-gray-300 hover:bg-gray-200'
-        ]"
-      >
-        <div
-          v-if="!localBasicInfo.image"
-          class="text-center text-gray-500 flex flex-col items-center"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+        ]">
+        <div v-if="!localBasicInfo.image" class="text-center text-gray-500 flex flex-col items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-gray-400 group-hover:text-gray-600"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
           <span class="text-sm">
             {{ isDragging ? 'Solte a imagem aqui' : 'Adicionar Foto' }}
           </span>
         </div>
-        <img
-          v-else
-          :src="localBasicInfo.image"
-          alt="Profile"
-          class="w-full h-full object-cover rounded-full"
-        />
-        <button
-          v-if="localBasicInfo.image"
-          @click.stop="removeImage"
-          class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-        >
+        <img v-else :src="localBasicInfo.image" alt="Profile" class="w-full h-full object-cover rounded-full" />
+        <button v-if="localBasicInfo.image" @click.stop="removeImage"
+          class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
           <XMarkIcon class="w-4 h-4" />
         </button>
       </div>
@@ -51,77 +31,54 @@
         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
           Nome Completo
         </label>
-        <input
-          v-model="localBasicInfo.name"
-          type="text"
-          id="name"
+        <input v-model="localBasicInfo.name" type="text" id="name"
           class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          required
-        />
+          required />
       </div>
 
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="label">
           Título Profissional
         </label>
-        <input
-          v-model="localBasicInfo.label"
-          type="text"
-          id="label"
-          class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-        />
+        <input v-model="localBasicInfo.label" type="text" id="label"
+          class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
       </div>
 
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="summary">
           Resumo Profissional
         </label>
-        <textarea
-          v-model="localBasicInfo.summary"
-          id="summary"
+        <textarea v-model="localBasicInfo.summary" id="summary"
           class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          rows="4"
-          required
-        ></textarea>
+          rows="4" required></textarea>
       </div>
 
       <div class="mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
         <label class="block text-gray-700 text-sm font-bold mb-3">
           Identificadores
         </label>
-        <div
-          v-for="(identifier, index) in localBasicInfo.identifiers"
-          :key="index"
-          class="flex items-center gap-2 mb-3 p-2 bg-white border border-gray-200 rounded relative"
-        >
-          <select
-            v-model="identifier.type"
-            class="flex-shrink-0 w-auto px-2 py-2 border rounded border-gray-300"
-          >
+        <div v-for="(identifier, index) in localBasicInfo.identifiers" :key="index"
+          class="flex items-center gap-2 mb-3 p-2 bg-white border border-gray-200 rounded relative">
+          <select v-model="identifier.type" class="flex-shrink-0 w-auto px-2 py-2 border rounded border-gray-300">
+            <option value="RG">RG</option>
             <option value="CPF">CPF</option>
             <option value="CNPJ">CNPJ</option>
+            <option value="CTPS">CTPS</option>
+            <option value="CNH">CNH</option>
             <option value="Passport">Passaporte</option>
-            <option value="Other">Outro</option>
+            <option value="RNE">RNE</option>
+            <option value="CNM">CNM</option>
+            <option value="Outro">Outro</option>
           </select>
-          <input
-            v-model="identifier.value"
-            type="text"
+          <input v-model="identifier.value" type="text"
             class="flex-grow px-3 py-2 border rounded border-gray-300 min-w-0"
-            :placeholder="`Digite o ${identifier.type}`"
-          />
-          <button
-            type="button"
-            @click="removeIdentifier(index)"
-            class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
-          >
+            :placeholder="`Digite o ${identifier.type}`" />
+          <button type="button" @click="removeIdentifier(index)"
+            class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded">
             <XMarkIcon class="w-3 h-3" />
           </button>
         </div>
-        <button
-          type="button"
-          @click="addIdentifier"
-          class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-2"
-        >
+        <button type="button" @click="addIdentifier" class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-2">
           Adicionar Identificador
         </button>
       </div>
@@ -131,32 +88,14 @@
           Localização
         </label>
         <div class="grid grid-cols-2 gap-3">
-          <input
-            v-model="localBasicInfo.location.city"
-            type="text"
-            placeholder="Cidade*"
-            required
-            class="w-full px-3 py-2 border rounded border-gray-300 col-span-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          />
-          <input
-            v-model="localBasicInfo.location.region"
-            type="text"
-            placeholder="Estado (Sigla)"
-            class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          />
-          <input
-            v-model="localBasicInfo.location.countryCode"
-            type="text"
-            placeholder="País* (BR)"
-            required
-            class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          />
-          <input
-            v-model="localBasicInfo.location.address"
-            type="text"
-            placeholder="Endereço (opcional)"
-            class="w-full px-3 py-2 border rounded border-gray-300 col-span-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          />
+          <input v-model="localBasicInfo.location.city" type="text" placeholder="Cidade*" required
+            class="w-full px-3 py-2 border rounded border-gray-300 col-span-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
+          <input v-model="localBasicInfo.location.region" type="text" placeholder="Estado (Sigla)"
+            class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
+          <input v-model="localBasicInfo.location.countryCode" type="text" placeholder="País* (BR)" required
+            class="w-full px-3 py-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
+          <input v-model="localBasicInfo.location.address" type="text" placeholder="Endereço (opcional)"
+            class="w-full px-3 py-2 border rounded border-gray-300 col-span-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
         </div>
       </div>
 
@@ -164,48 +103,47 @@
         <label class="block text-gray-700 text-sm font-bold mb-3">
           Perfis
         </label>
-        <div
-          v-for="(profile, index) in localBasicInfo.profiles"
-          :key="index"
-          class="flex flex-col gap-2 mb-3 p-2 bg-white border border-gray-200 rounded relative"
-        >
+        <div v-for="(profile, index) in localBasicInfo.profiles" :key="index"
+          class="flex flex-col gap-2 mb-3 p-2 bg-white border border-gray-200 rounded relative">
           <div class="flex items-center gap-2">
-            <select
-              v-model="profile.network"
-              class="flex-shrink-0 w-auto px-2 py-2 border rounded border-gray-300"
-            >
+            <select v-model="profile.network" class="flex-shrink-0 w-auto px-2 py-2 border rounded border-gray-300">
               <option value="LinkedIn">LinkedIn</option>
               <option value="GitHub">GitHub</option>
               <option value="Lattes">Lattes</option>
-              <option value="Other">Outro</option>
+              <option value="Goodreads">Goodreads</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Twitter">X (Antigo Twitter)</option>
+              <option value="Website">Website</option>
+              <option value="Behance">Behance</option>
+              <option value="Dribbble">Dribbble</option>
+              <option value="AcademiaEdu">Academia.edu</option>
+              <option value="ResearchGate">ResearchGate</option>
+              <option value="Medium">Medium</option>
+              <option value="DevTo">Dev.to</option>
+              <option value="StackOverflow">Stack Overflow</option>
+              <option value="Twitch">Twitch</option>
+              <option value="YouTube">YouTube</option>
+              <option value="Vimeo">Vimeo</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Pinterest">Pinterest</option>
+              <option value="Tumblr">Tumblr</option>
+              <option value="Mastodon">Mastodon</option>
+              <option value="Bluesky">Bluesky</option>
+              <option value="TabNews">TabNews</option>
+              <option value="Outro">Outro</option>
             </select>
-            <input
-              v-model="profile.url"
-              type="url"
-              placeholder="URL do Perfil*"
-              required
-              class="flex-grow px-3 py-2 border rounded border-gray-300 min-w-0"
-            />
+            <input v-model="profile.url" type="url" placeholder="URL do Perfil*" required
+              class="flex-grow px-3 py-2 border rounded border-gray-300 min-w-0" />
           </div>
-          <input
-            v-model="profile.username"
-            type="text"
-            placeholder="Nome de Usuário (opcional)"
-            class="w-full px-3 py-2 border rounded border-gray-300"
-          />
-          <button
-            type="button"
-            @click="removeProfile(index)"
-            class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
-          >
+          <input v-model="profile.username" type="text" placeholder="Nome de Usuário (opcional)"
+            class="w-full px-3 py-2 border rounded border-gray-300" />
+          <button type="button" @click="removeProfile(index)"
+            class="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded">
             <XMarkIcon class="w-3 h-3" />
           </button>
         </div>
-        <button
-          type="button"
-          @click="addProfile"
-          class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-2"
-        >
+        <button type="button" @click="addProfile" class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-2">
           Adicionar Perfil
         </button>
       </div>

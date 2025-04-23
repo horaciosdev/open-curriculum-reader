@@ -85,7 +85,7 @@ const emit = defineEmits(['update:modelValue'])
 const localAwards = ref<Curriculum['awards']>(
   (props.modelValue || []).map(award => ({
     title: award.title || '',
-    date: award.date || '',
+    date: award.date ? award.date.split('T')[0] : '',
     awarder: award.awarder || ''
   }))
 )

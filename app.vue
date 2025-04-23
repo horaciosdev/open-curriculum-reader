@@ -2,8 +2,8 @@
   <div class="min-h-screen bg-gray-100">
     <div class="flex h-screen">
       <!-- Barra lateral esquerda com ícones -->
-      <div class="w-16 bg-gray-800 flex flex-col items-center py-4 space-y-4">
-        <button v-for="section in sections" :key="section.id" @click="activeSection = section.id"
+      <div v-if="curriculum" class="w-16 bg-gray-800 flex flex-col items-center py-4 space-y-4">
+        <button v-for="section in sections" :key="section.id" @click="handleSectionClick(section.id)"
           class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
           :class="{ 'bg-gray-700': activeSection === section.id }">
           <component :is="section.icon" class="w-6 h-6 text-white" />
@@ -11,8 +11,8 @@
       </div>
 
       <!-- Painel de edição -->
-      <div class="w-96 bg-white border-r border-gray-200 overflow-y-auto" v-if="activeSection">
-        <div class="p-4">
+      <div class="w-[600px] bg-white border-r border-gray-200 overflow-y-auto" v-if="activeSection && curriculum">
+        <div class="p-4 pb-96">
           <h2 class="text-lg font-semibold mb-4">{{ getActiveSectionTitle() }}</h2>
           <!-- Componente de edição será renderizado aqui -->
           <component :is="getEditorComponent()" v-if="curriculum" v-model="curriculum[activeSection]" />
@@ -21,6 +21,12 @@
 
       <!-- Visualização do currículo -->
       <div class="flex-1 overflow-y-auto p-8">
+
+        <!-- Mensagem de erro -->
+        <div v-if="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+          <strong class="font-bold">Erro: </strong>
+          <span class="block sm:inline">{{ errorMessage }}</span>
+        </div>
 
         <!-- Barra de ferramentas -->
         <div v-if="curriculum" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-4 mb-4">
@@ -138,6 +144,8 @@ const curriculum = ref<Curriculum | null>(null) // Define o tipo do curriculum
 const activeSection = ref<string | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 
+const errorMessage = ref<string | null>(null)
+
 const { data: themes } = useFetch('/api/themes')
 const selectedTheme = ref('')
 
@@ -163,7 +171,17 @@ const getEditorComponent = () => {
   return activeSection.value ? componentMap[activeSection.value as keyof typeof componentMap] : null
 }
 
+const handleSectionClick = (sectionId: string) => {
+  if (activeSection.value === sectionId) {
+    activeSection.value = null
+  } else {
+    activeSection.value = sectionId
+  }
+}
+
 const createNewCurriculum = () => {
+  errorMessage.value = null;
+
   activeSection.value = null
 
   curriculum.value = Object.assign({}, {
@@ -212,6 +230,8 @@ const openFileInput = () => {
 }
 
 const handleFileUpload = async (event: Event) => {
+  errorMessage.value = null;
+
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
 
@@ -223,8 +243,6 @@ const handleFileUpload = async (event: Event) => {
     // Validate the curriculum first
     const validationErrors = validate(text)
 
-    console.log('Validation Errors:', validationErrors)
-
     // Check if validation failed
     if (validationErrors === null) {
       throw new Error('Erro ao fazer o parsing do arquivo CVT')
@@ -232,8 +250,10 @@ const handleFileUpload = async (event: Event) => {
 
     if (validationErrors.length > 0) {
       // If there are validation errors, show them
-      const errorMessage = validationErrors.join('\n')
-      alert(`Arquivo inválido:\n${errorMessage}`)
+      const error = validationErrors.join('\n')
+      console.log(`Arquivo inválido:\n${error}`)
+
+      errorMessage.value = "Arquivo inválido. O arquivo não pode ser carregado.";
       return
     }
 
