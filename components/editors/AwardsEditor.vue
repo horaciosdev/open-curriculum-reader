@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
-import type { Curriculum } from '../../types/curriculum'
+import { Curriculum } from 'open-cvt'
 
 // Define props com o tipo Curriculum['awards']
 const props = defineProps({
@@ -85,7 +85,7 @@ const emit = defineEmits(['update:modelValue'])
 const localAwards = ref<Curriculum['awards']>(
   (props.modelValue || []).map(award => ({
     title: award.title || '',
-    date: award.date ? award.date.split('T')[0] : '',
+    date: award.date || '',
     awarder: award.awarder || ''
   }))
 )

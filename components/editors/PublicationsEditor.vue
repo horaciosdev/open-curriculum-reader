@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
-import type { Curriculum } from '../../types/curriculum'
+import { Curriculum } from 'open-cvt'
 
 // Define props com o tipo Curriculum['publications']
 const props = defineProps({
@@ -99,7 +99,7 @@ const localPublications = ref<Curriculum['publications']>(
   (props.modelValue || []).map(publication => ({
     name: publication.name || '',
     publisher: publication.publisher || '',
-    releaseDate: publication.releaseDate || '',
+    releaseDate: publication.releaseDate || null,
     url: publication.url || ''
   }))
 )
@@ -114,7 +114,7 @@ function addPublication() {
   localPublications.value?.push({
     name: '',
     publisher: '',
-    releaseDate: '',
+    releaseDate: null,
     url: ''
   })
 }

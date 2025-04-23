@@ -71,7 +71,7 @@ const localCertifications = ref<Curriculum['certifications']>(
     props.modelValue?.map(certification => ({
         name: certification.name || '',
         issuer: certification.issuer || '',
-        date: certification.date ? certification.date.split('T')[0] : '', // Garante o formato YYYY-MM-DD
+        date: certification.date || '',
         url: certification.url || ''
     })) ?? []
 )

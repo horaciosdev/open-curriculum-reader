@@ -156,8 +156,8 @@ const localWorkExperience = ref<Curriculum['work']>(
     organization: work.organization || '',
     position: work.position || '',
     url: work.url || '',
-    startDate: work.startDate ? work.startDate.split('T')[0] : '', // Garante o formato YYYY-MM-DD
-    endDate: work.endDate ? work.endDate.split('T')[0] : null, // Garante o formato YYYY-MM-DD ou null
+    startDate: work.startDate || '',
+    endDate: work.endDate || null,
     highlights: work.highlights || []
   }))
 )

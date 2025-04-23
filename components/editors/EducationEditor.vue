@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
-import type { Curriculum } from '../../types/curriculum'
+import { Curriculum } from 'open-cvt'
 
 // Define props com o tipo Curriculum['education']
 const props = defineProps({
@@ -119,8 +119,8 @@ const localEducation = ref<Curriculum['education']>(
     institution: education.institution || '',
     studyType: education.studyType || '',
     area: education.area || '',
-    startDate: education.startDate ? education.startDate.split('T')[0] : '',
-    endDate: education.endDate ? education.endDate.split('T')[0] : '',
+    startDate: education.startDate || '',
+    endDate: education.endDate || null,
     courses: education.courses || []
   }))
 )
@@ -137,7 +137,7 @@ function addEducation() {
     studyType: '',
     area: '',
     startDate: '',
-    endDate: '',
+    endDate: null,
     courses: []
   })
 }

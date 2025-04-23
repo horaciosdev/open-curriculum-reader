@@ -154,7 +154,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
-import type { Curriculum } from '../../types/curriculum'
+import { Curriculum } from 'open-cvt'
 
 // Define props com o tipo Curriculum['basics']
 const props = defineProps<{

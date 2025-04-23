@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
-import type { Curriculum } from '../../types/curriculum'
+import { Curriculum } from 'open-cvt'
 
 // Define props com o tipo Curriculum['volunteer']
 const props = defineProps({
@@ -90,8 +90,8 @@ const localVolunteer = ref<Curriculum['volunteer']>(
     (props.modelValue || []).map(volunteer => ({
         organization: volunteer.organization || '',
         position: volunteer.position || '',
-        startDate: volunteer.startDate ? volunteer.startDate.split('T')[0] : '',
-        endDate: volunteer.endDate ? volunteer.endDate.split('T')[0] : '',
+        startDate: volunteer.startDate || '',
+        endDate: volunteer.endDate || null,
         highlights: volunteer.highlights || []
     }))
 )
