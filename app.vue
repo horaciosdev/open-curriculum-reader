@@ -99,7 +99,8 @@ import {
   PrinterIcon,
   PlusIcon
 } from '@heroicons/vue/24/outline'
-import type { Curriculum } from '~/types/curriculum'
+
+import { validate, Curriculum } from 'open-cvt'
 
 import BasicInfoEditor from '~/components/editors/BasicInfoEditor.vue'
 import WorkExperienceEditor from '~/components/editors/WorkExperienceEditor.vue'
@@ -210,6 +211,25 @@ const handleFileUpload = async (event: Event) => {
 
   try {
     const text = await file.text()
+
+    // Validate the curriculum first
+    const validationErrors = validate(text)
+
+    console.log('Validation Errors:', validationErrors)
+    
+    // Check if validation failed
+    if (validationErrors === null) {
+      throw new Error('Erro ao fazer o parsing do arquivo CVT')
+    }
+    
+    if (validationErrors.length > 0) {
+      // If there are validation errors, show them
+      const errorMessage = validationErrors.join('\n')
+      alert(`Arquivo inválido:\n${errorMessage}`)
+      return
+    }
+
+    // If validation passes, parse the curriculum
     const parsedCurriculum = JSON.parse(text) as Curriculum
     curriculum.value = parsedCurriculum
     activeSection.value = 'basics'
