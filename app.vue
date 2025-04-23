@@ -23,7 +23,7 @@
       <div class="flex-1 overflow-y-auto p-8">
 
         <!-- Barra de ferramentas -->
-        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-4 mb-4">
+        <div v-if="curriculum" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-4 mb-4">
 
           <div class="flex justify-between items-center mb-4">
             <select v-model="selectedTheme"
