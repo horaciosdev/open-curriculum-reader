@@ -32,7 +32,8 @@
         <div v-if="curriculum" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-4 mb-4">
 
           <div class="flex justify-between items-center mb-4">
-            <select v-model="selectedTheme"
+            <!-- Selecione o tema -->
+            <select v-model="selectedThemeId"
               class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
               <option v-for="theme in themes" :key="theme.id" :value="theme.id">
                 {{ theme.name }}
@@ -69,7 +70,7 @@
         <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
           <template v-if="curriculum">
             <!-- Preview do currículo -->
-            <CurriculumPreview :curriculum="curriculum" :selectedTheme="selectedTheme as 'classic' | 'modern'" />
+            <CurriculumPreview :curriculum="curriculum" :themeComponent="currentThemeComponent" />
           </template>
           <template v-else>
             <div class="text-center py-12">
@@ -127,6 +128,9 @@ import PublicationsEditor from '~/components/editors/PublicationsEditor.vue'
 import InterestsEditor from '~/components/editors/InterestsEditor.vue'
 import ReferencesEditor from '~/components/editors/ReferencesEditor.vue'
 
+import { useThemes } from '~/composables/useThemes'
+const { themes, selectedThemeId, currentThemeComponent } = useThemes()
+
 const sections = [
   { id: 'basics', icon: UserIcon, title: 'Informações Básicas' },
   { id: 'work', icon: BriefcaseIcon, title: 'Experiência Profissional' },
@@ -145,9 +149,6 @@ const activeSection = ref<string | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 
 const errorMessage = ref<string | null>(null)
-
-const { data: themes } = useFetch('/api/themes')
-const selectedTheme = ref('')
 
 const getActiveSectionTitle = () => {
   const section = sections.find(s => s.id === activeSection.value)
@@ -216,10 +217,6 @@ const createNewCurriculum = () => {
     references: []
   }) as Curriculum
 
-  if (themes.value && themes.value.length > 0) {
-    selectedTheme.value = themes.value[0].id
-  }
-
   setTimeout(() => {
     activeSection.value = 'basics'
   }, 100)
@@ -262,9 +259,6 @@ const handleFileUpload = async (event: Event) => {
     curriculum.value = parsedCurriculum
     activeSection.value = 'basics'
 
-    if (themes.value && themes.value.length > 0) {
-      selectedTheme.value = themes.value[0].id
-    }
   } catch (error) {
     alert('Erro ao carregar o arquivo. Certifique-se que é um arquivo .cvt válido.')
   }
