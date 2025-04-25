@@ -6,16 +6,23 @@ export default defineEventHandler(async (event) => {
       if (fileContent) return fileContent;
     }
 
-    // Para produção, carrega o arquivo estático
-    const response = await fetch(new URL('/example.cvt', event.node.req.url));
+    // Para produção, carrega o arquivo estático usando o caminho absoluto
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000';
+
+    const url = `${baseUrl}/example.cvt`;
+    const response = await fetch(url);
+
     if (!response.ok) {
-      throw new Error("Arquivo não encontrado");
+      throw new Error(`Arquivo não encontrado: ${response.status}`);
     }
+
     return await response.text();
 
   } catch (error) {
     console.error("Erro ao ler o arquivo:", error);
     setResponseStatus(event, 500);
-    return { error: "Erro ao carregar o currículo de exemplo" };
+    return { error: `Erro ao carregar o currículo de exemplo: ${(error as Error).message}` };
   }
 });
