@@ -7,8 +7,8 @@ export default defineNuxtConfig({
   nitro: {
     storage: {
       myFileSystem: { // pass this key - 'myFileSystem' - into useStorage while accessing the .json file
-        driver: 'fs',
-        base: 'public/server/',
+        driver: process.env.NODE_ENV === 'production' ? 'vercelKV' : 'fs',
+        base: process.env.NODE_ENV === 'production' ? undefined : 'public/server/',
       }
     }
   },

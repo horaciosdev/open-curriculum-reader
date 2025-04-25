@@ -1,7 +1,7 @@
 // server/api/example.ts
 export default defineEventHandler(async (event) => {
   try {
-    const fileContent = await useStorage('myFileSystem').getItemRaw('example.cvt');
+    const fileContent = await useStorage('myFileSystem').getItem('example.cvt');
 
     if (!fileContent) {
       throw new Error("Arquivo não encontrado na storage");
