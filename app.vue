@@ -29,7 +29,9 @@
         </div>
 
         <!-- Barra de ferramentas -->
-        <div v-if="curriculum" class="sticky top-0 z-10 print:hidden max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-4 mb-4">
+        <div v-if="curriculum"
+          class="sticky top-0 z-10 print:hidden max-w-4xl mx-auto rounded-lg shadow-lg p-4 mb-4 border border-gray-400 bg-white">
+
 
           <div class="flex justify-between items-center mb-4">
             <!-- Selecione o tema -->
@@ -46,23 +48,31 @@
             </button>
           </div>
 
-          <div class="flex flex-wrap gap-2 justify-start items-center">
-            <button @click="printCurriculum"
-              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
-              <PrinterIcon class="mr-2 h-5 w-5" />
-              Imprimir
-            </button>
-            <button @click="saveCurriculum"
-              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
-              <ArrowDownOnSquareIcon class="mr-2 h-5 w-5" />
-              Salvar Currículo
-            </button>
-            <button @click="openFileInput"
-              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
-              <ArrowUpOnSquareIcon class="mr-2 h-5 w-5" />
-              Carregar Novo Currículo
-            </button>
-            <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
+          <div class="flex flex-wrap gap-2 items-center">
+            <div class="flex flex-wrap gap-2 justify-start items-center flex-grow">
+              <button @click="printCurriculum"
+                class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <PrinterIcon class="mr-2 h-5 w-5" />
+                Imprimir
+              </button>
+              <button @click="saveCurriculum"
+                class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <ArrowDownOnSquareIcon class="mr-2 h-5 w-5" />
+                Salvar Currículo
+              </button>
+              <button @click="openFileInput"
+                class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <ArrowUpOnSquareIcon class="mr-2 h-5 w-5" />
+                Carregar Novo Currículo
+              </button>
+              <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
+            </div>
+            <div class="flex justify-end">
+              <button @click="loadExampleCurriculum"
+                class="inline-flex items-center px-4 py-1 border border-transparent rounded-md shadow-md text-xs font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:bg-gradient-to-l focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                Currículo de Exemplo
+              </button>
+            </div>
           </div>
 
         </div>
@@ -77,20 +87,33 @@
               <h3 class="text-lg font-medium text-gray-900 mb-4">
                 Nenhum currículo carregado
               </h3>
-              <div class="space-x-4">
-                <button @click="createNewCurriculum"
-                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                  Criar Novo
-                </button>
-                <button @click="openFileInput"
-                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                  Carregar Arquivo
-                </button>
-                <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
+              <div class="flex flex-col justify-center gap-4 items-center">
+                <div class="flex gap-4">
+                  <button @click="loadExampleCurriculum"
+                    class="inline-flex items-center px-6 py-3 border border-transparent rounded-md shadow-md text-md font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150 animate-pulse">
+                    <DocumentArrowDownIcon class="-ml-1 mr-3 h-5 w-5" />
+                    Veja o Currículo de Exemplo
+                  </button>
+                </div>
+                <div class="flex gap-4">
+                  <span>OU</span>
+                </div>
+                <div class="flex gap-4">
+                  <button @click="createNewCurriculum"
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                    Criar Novo Currículo
+                  </button>
+                  <button @click="openFileInput"
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    Carregar Arquivo *.cvt
+                  </button>
+                  <input ref="fileInput" type="file" accept=".cvt" class="hidden" @change="handleFileUpload">
+                </div>
               </div>
             </div>
           </template>
         </div>
+        <About v-if="!curriculum" />
       </div>
     </div>
   </div>
@@ -112,7 +135,8 @@ import {
   ArrowUpOnSquareIcon,
   ArrowDownOnSquareIcon,
   PrinterIcon,
-  PlusIcon
+  PlusIcon,
+  DocumentArrowDownIcon
 } from '@heroicons/vue/24/outline'
 
 import { validate, Curriculum } from 'open-cvt'
@@ -293,5 +317,21 @@ const saveCurriculum = () => {
 
 const printCurriculum = () => {
   window.print()
+}
+
+const loadExampleCurriculum = async () => {
+  errorMessage.value = null;
+  try {
+    const { data, error } = await useFetch('/api/example');
+
+    if (error.value) {
+      throw new Error(error.value.message || 'Não foi possível carregar o currículo de exemplo da API');
+    }
+
+    curriculum.value = data.value;
+  } catch (error) {
+    console.error('Erro ao carregar currículo de exemplo da API:', error);
+    errorMessage.value = "Erro ao carregar o currículo de exemplo da API";
+  }
 }
 </script>

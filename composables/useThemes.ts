@@ -28,7 +28,7 @@ export function useThemes() {
     // Adicione outros temas aqui
   ]
 
-  const selectedThemeId = ref('premium') // Tema padrão
+  const selectedThemeId = ref('enhanced') // Tema padrão
 
   // Componente do tema atual
   const currentThemeComponent = computed(() => {
