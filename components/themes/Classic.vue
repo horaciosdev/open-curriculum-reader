@@ -238,7 +238,7 @@ const formatDate = (date: string) => {
 
 const groupedSkills = computed(() => {
   if (!props.curriculum.skills) return {}
-  return props.curriculum.skills.reduce((acc, skill) => {
+  return props.curriculum.skills.reduce((acc : Record<string, Curriculum['skills']>, skill : Curriculum['skills'][number]) => {
     const category = skill.category || 'other'
     if (!acc[category]) {
       acc[category] = []

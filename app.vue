@@ -67,7 +67,7 @@
 
         </div>
 
-        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
+        <div class="max-w-8xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-4">
           <template v-if="curriculum">
             <!-- Preview do currículo -->
             <CurriculumPreview :curriculum="curriculum" :themeComponent="currentThemeComponent" />

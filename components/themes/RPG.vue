@@ -1243,80 +1243,81 @@ const onImageError = () => {
 /* Tomos Publicados (Publicações) */
 .published-tomes {
     margin-bottom: 50px;
+    page-break-inside: avoid;
 }
 
 .tomes-shelves {
     display: flex;
     flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
+    gap: 20px;
+    justify-content: flex-start;
+    page-break-inside: avoid;
 }
 
 .tome-book {
-    flex: 1;
-    min-width: 250px;
-    max-width: 350px;
-    height: 200px;
+    flex: 1 1 300px;
+    min-height: 200px;
+    max-width: 100%;
     display: flex;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
     position: relative;
-    perspective: 1000px;
-    transition: transform 0.5s;
-}
-
-.tome-book:hover {
-    transform: translateY(-10px) rotateX(5deg);
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .tome-spine {
-    width: 40px;
-    background-color: #795548;
-    border-radius: 5px 0 0 5px;
+    width: 35px;
+    background-color: #5d4037;
     display: flex;
     align-items: center;
     justify-content: center;
     writing-mode: vertical-rl;
     text-orientation: mixed;
     padding: 10px 0;
-}
-
-.spine-title {
-    color: #fff8e1;
+    color: #f5f5f5;
     font-family: 'MedievalSharp', cursive;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .tome-cover {
     flex: 1;
     background-color: #8d6e63;
     color: #fff8e1;
-    border-radius: 0 5px 5px 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    page-break-inside: avoid;
 }
 
 .tome-title {
     font-family: 'MedievalSharp', cursive;
     font-size: 1.2rem;
     margin: 0 0 15px 0;
+    line-height: 1.3;
+    break-after: avoid;
 }
 
 .tome-publisher,
 .tome-date {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     margin-bottom: 10px;
     font-size: 0.9rem;
     opacity: 0.9;
+    break-inside: avoid;
 }
 
 .tome-link {
     margin-top: auto;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     background-color: rgba(255, 248, 225, 0.2);
     padding: 8px 15px;
     border-radius: 5px;
@@ -1325,10 +1326,38 @@ const onImageError = () => {
     font-size: 0.9rem;
     transition: background-color 0.3s ease;
     align-self: flex-start;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    max-width: 100%;
 }
 
 .tome-link:hover {
     background-color: rgba(255, 248, 225, 0.3);
+}
+
+@media print {
+    .tome-book {
+        flex: 1 1 45%;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .tome-cover {
+        padding: 15px;
+    }
+
+    .tome-link {
+        word-break: break-word;
+        display: block;
+    }
+
+    .tome-link::after {
+    content: " (" attr(href) ")"; /* Exibe a URL entre parênteses */
+    display: block; /* Força a URL a ficar em uma nova linha */
+    font-size: 10px; /* Reduz um pouco o tamanho da fonte para caber melhor */
+    margin-top: 5px; /* Adiciona um pequeno espaço entre o texto e a URL */
+    width: 100%; /* Faz com que a URL ocupe toda a largura disponível */
+  }
 }
 
 /* Passatempos & Hobbies (Interesses) */

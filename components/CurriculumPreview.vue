@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Curriculum } from '~/types/curriculum'
+import { Curriculum } from 'open-cvt'
 
 const props = defineProps({
   curriculum: {
