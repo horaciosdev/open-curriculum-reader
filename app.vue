@@ -35,12 +35,15 @@
 
           <div class="flex justify-between items-center mb-4">
             <!-- Selecione o tema -->
-            <select v-model="selectedThemeId"
-              class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option v-for="theme in themes" :key="theme.id" :value="theme.id">
-                {{ theme.name }}
-              </option>
-            </select>
+            <div class="border border-gray-300 rounded-md shadow-sm flex items-center p-1">
+              <SwatchIcon class="inline h-5 w-5 text-gray-700 mr-2" />
+              <select v-model="selectedThemeId"
+                class="inline-flex items-center px-4 py-1 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option v-for="theme in themes" :key="theme.id" :value="theme.id">
+                  {{ theme.name }}
+                </option>
+              </select>
+            </div>
 
             <button @click="createNewCurriculum"
               class="inline-flex items-center px-4 py-1 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700">
@@ -77,7 +80,7 @@
 
         </div>
 
-        <div class="max-w-8xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-4">
+        <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-4">
           <template v-if="curriculum">
             <!-- Preview do currículo -->
             <CurriculumPreview :curriculum="curriculum" :themeComponent="currentThemeComponent" />
@@ -136,6 +139,8 @@ import {
   ArrowDownOnSquareIcon,
   PrinterIcon,
   PlusIcon,
+  SwatchIcon,
+  ArrowLeftIcon,
   DocumentArrowDownIcon
 } from '@heroicons/vue/24/outline'
 
