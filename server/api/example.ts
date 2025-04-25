@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       ? `https://${process.env.VERCEL_URL}`
       : 'http://localhost:3000';
 
-    const url = `${baseUrl}/example.cvt`;
+    const url = `${baseUrl}/public/server/example.cvt`;
     const response = await fetch(url);
 
     if (!response.ok) {
