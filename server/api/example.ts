@@ -1,17 +1,21 @@
-// server/api/example.js (ou .ts)
+// server/api/example.ts
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 export default defineEventHandler(async (event) => {
   try {
-    const filePath = join(process.cwd(), "public", "example.cvt"); // Caminho para o arquivo na pasta 'public'
+    // Use environment-specific path resolution
+    const filePath = process.env.VERCEL 
+      ? "/var/task/public/example.cvt" 
+      : join(process.cwd(), "public", "example.cvt");
+
     const fileContent = await readFile(filePath, "utf8");
 
     try {
       const jsonData = JSON.parse(fileContent);
       return jsonData;
     } catch (jsonError) {
-      // Se não for JSON, retorna como texto
+      // If not JSON, return as text
       setHeader(event, "Content-Type", "text/plain");
       return fileContent;
     }
