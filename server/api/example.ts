@@ -1,24 +1,14 @@
 // server/api/example.ts
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
-
 export default defineEventHandler(async (event) => {
   try {
-    // Use environment-specific path resolution
-    const filePath = process.env.VERCEL 
-      ? "/var/task/public/example.cvt" 
-      : join(process.cwd(), "public", "example.cvt");
+    const fileContent = await useStorage('myFileSystem').getItem('example.cvt');
 
-    const fileContent = await readFile(filePath, "utf8");
-
-    try {
-      const jsonData = JSON.parse(fileContent);
-      return jsonData;
-    } catch (jsonError) {
-      // If not JSON, return as text
-      setHeader(event, "Content-Type", "text/plain");
-      return fileContent;
+    if (!fileContent) {
+      throw new Error("Arquivo não encontrado na storage");
     }
+
+    return fileContent;
+
   } catch (error) {
     console.error("Erro ao ler o arquivo:", error);
     setResponseStatus(event, 500);

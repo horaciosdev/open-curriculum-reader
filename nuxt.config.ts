@@ -4,6 +4,14 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['@/assets/css/print.css'],
+  nitro: {
+    storage: {
+      myFileSystem: { // pass this key - 'myFileSystem' - into useStorage while accessing the .json file
+        driver: 'fs',
+        base: 'public/server/',
+      }
+    }
+  },
   app: {
     head: {
       title: 'Editor de Currículo',
