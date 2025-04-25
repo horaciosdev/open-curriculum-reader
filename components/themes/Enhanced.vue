@@ -315,11 +315,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Footer -->
-        <div class="bg-gray-50 border-t border-gray-200 p-4 text-center text-gray-500 text-sm">
-            <p>Atualizado em {{ getCurrentDate() }}</p>
-        </div>
     </div>
 </template>
 

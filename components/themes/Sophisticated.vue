@@ -181,10 +181,6 @@
         </div>
       </section>
     </main>
-
-    <footer class="text-center p-4 border-t" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
-      Atualizado em {{ getCurrentDate() }}
-    </footer>
   </div>
 </template>
 
