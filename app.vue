@@ -323,7 +323,6 @@ const loadExampleCurriculum = async () => {
   errorMessage.value = null;
   try {
     const { data, error } = await useFetch('/api/example');
-    console.log('Currículo de exemplo:', JSON.stringify(data.value));
 
     if (error.value) {
       throw new Error(error.value.message || 'Não foi possível carregar o currículo de exemplo da API');
